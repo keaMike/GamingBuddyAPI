@@ -8,7 +8,8 @@ const {
 
 exports.getUsers = async (req, res) => {
     const { ownId } = req.query
-    repo.find('users', {_id: {$ne: ObjectId(ownId)}})
+    const query = ownId ? {_id: {$ne: ObjectId(ownId)}} : {}
+    repo.find('users', query)
         .then(results => {
             res.status(200).json({data: results})
         }).catch(error => {

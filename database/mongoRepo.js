@@ -1,6 +1,6 @@
 const MongoDB = require('mongodb');
 
-const queryPromise = async function (queryType, collectionName, data) {
+const queryPromise = async function (queryType, collectionName, query, data) {
     return new Promise((resolve, reject) => {
         MongoDB.connect(
             process.env.MONGO_DB_SERVER_CONNECTION_STRING,
@@ -24,15 +24,15 @@ const queryPromise = async function (queryType, collectionName, data) {
                                             break
                     case 'insertMany'   :   collection.insertMany(data, dbCallback)
                                             break
-                    case 'updateOne'    :   collection.updateOne(data, dbCallback)
+                    case 'updateOne'    :   collection.updateOne(query, data, dbCallback)
                                             break
-                    case 'updateMany'   :   collection.updateMany(data, dbCallback)
+                    case 'updateMany'   :   collection.updateMany(query, data, dbCallback)
                                             break
-                    case 'deleteOne'    :   collection.deleteOne(data, dbCallback)
+                    case 'deleteOne'    :   collection.deleteOne(query, dbCallback)
                                             break
-                    case 'deleteMany'   :   collection.deleteMany(data, dbCallback)
+                    case 'deleteMany'   :   collection.deleteMany(query, dbCallback)
                                             break
-                    case 'find'         :   collection.find(data).toArray(dbCallback)
+                    case 'find'         :   collection.find(query).toArray(dbCallback)
                                             break
                     default             :   console.log('Wrong query type')
                                             break
@@ -41,73 +41,16 @@ const queryPromise = async function (queryType, collectionName, data) {
     })
 }
 
-const updatePromise = async function (collectionName, query, data) {
-    return new Promise((resolve, reject) => {
-        MongoDB.connect(process.env.MONGO_DB_SERVER_CONNECTION_STRING, { useUnifiedTopology: true }, (error, client) => {
-            if (error) throw new Error();
-
-            const db = client.db(process.env.MONGO_DB_NAME);
-            const collection = db.collection(collectionName);
-
-            collection.updateOne(query, { $set: data }, (error, result) => {
-                if (error) reject(error);
-
-                client.close();
-
-                resolve(result);
-            });
-        });
-    });
-}
-
-const deleteOnePromise = async function (collectionName, query) {
-    return new Promise((resolve, reject) => {
-        MongoDB.connect(process.env.MONGO_DB_SERVER_CONNECTION_STRING, { useUnifiedTopology: true }, (error, client) => {
-            if (error) throw new Error();
-
-            const db = client.db(process.env.MONGO_DB_NAME);
-            const collection = db.collection(collectionName);
-
-            collection.deleteOne(query, (error, result) => {
-                if (error) reject(error);
-
-                client.close();
-
-                resolve(result);
-            });
-        });
-    });
-}
-
-const deleteManyPromise = async function (collectionName, query) {
-    return new Promise((resolve, reject) => {
-        MongoDB.connect(process.env.MONGO_DB_SERVER_CONNECTION_STRING, { useUnifiedTopology: true }, (error, client) => {
-            if (error) throw new Error();
-
-            const db = client.db(process.env.MONGO_DB_NAME);
-            const collection = db.collection(collectionName);
-
-            collection.deleteMany(query, (error, result) => {
-                if (error) reject(error);
-
-                client.close();
-
-                resolve(result);
-            });
-        });
-    });
-}
-
 async function find(collectionName, query) {
     return await queryPromise('find', collectionName, query)
 }
 
-async function insert(collectionName, data) {
-    return await queryPromise('insertOne', collectionName, data)
+async function insertOne(collectionName, data) {
+    return await queryPromise('insertOne', collectionName, null, data)
 }
 
 async function update(collectionName, query, data) {
-    return await queryPromise('updateOne', collectionName, data)
+    return await queryPromise('updateOne', collectionName, query, data)
 }
 
 async function deleteOne(collectionName, query) {
@@ -120,7 +63,7 @@ async function deleteMany(collectionName, query) {
 
 module.exports = {
     find,
-    insert,
+    insertOne,
     update,
     deleteOne,
     deleteMany

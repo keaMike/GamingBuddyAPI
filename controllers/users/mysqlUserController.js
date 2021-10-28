@@ -1,9 +1,9 @@
-const { getPool } = require('../database/mysqlConfig')
+const { getPool } = require('../../database/mysqlConfig')
 const {
   hashPassword,
   verifyPassword,
   signToken,
-} = require('../utils/encryption')
+} = require('../../utils/encryption')
 
 exports.getUsers = async (req, res) => {
   const ownId = 2
@@ -172,4 +172,19 @@ exports.signIn = async (req, res) => {
       .status(500)
       .json({ data: 'Something went wrong, please try again' })
   }
+}
+
+exports.addGameToUser = async (req, res) => {
+    // TODO implement
+    return res.status(501).json({ data: 'Not yet implemented' })
+}
+
+exports.addPlatformToUser = async (req, res) => {
+    // TODO implement
+    return res.status(501).json({ data: 'Not yet implemented' })
+}
+
+exports.findMatches = async (req, res) => {
+    // TODO implement
+    return res.status(501).json({ data: 'Not yet implemented' })
 }

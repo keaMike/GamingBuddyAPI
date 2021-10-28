@@ -1,5 +1,5 @@
 require('dotenv').config()
-require('./database/dbConfig').initConnection()
+require('./database/mysqlConfig').initConnection()
 const express = require('express')
 const app = express()
 const userRoutes = require('./routes/userRoutes')

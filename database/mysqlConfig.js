@@ -5,10 +5,10 @@ function initConnection() {
   if (!pool) {
     pool = mysql.createPool({
       connectionLimit: 10,
-      host: process.env.DB_URL,
-      user: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_NAME,
+      host: process.env.MYSQL_DB_URL,
+      user: process.env.MYSQL_DB_USERNAME,
+      password: process.env.MYSQL_DB_PASSWORD,
+      database: process.env.MYSQL_DB_NAME,
     })
   }
 }

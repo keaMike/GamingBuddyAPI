@@ -1,4 +1,4 @@
-const { getPool } = require('../database/dbConfig')
+const { getPool } = require('../database/mysqlConfig')
 const {
   hashPassword,
   verifyPassword,

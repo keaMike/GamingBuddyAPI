@@ -20,7 +20,7 @@ exports.getUsers = async (req, res) => {
 }
 
 exports.getUserById = async (req, res) => {
-    const { id } = req.query
+    const { id } = req.params
 
     repo.find(userCollection, { id: id })
         .then(results => {
@@ -31,7 +31,7 @@ exports.getUserById = async (req, res) => {
 }
 
 exports.getOwnUser = async (req, res) => {
-    const { id } = req.user.id
+    const { id } = req.user
     repo.find(userCollection, { id: id })
         .then(results => {
             return res.status(200).json({data: results})

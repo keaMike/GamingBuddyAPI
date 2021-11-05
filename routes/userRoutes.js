@@ -1,10 +1,8 @@
 const router = require('express').Router()
-const userController = require('../controllers/controllerSelector').controller();
+const userController = require('../controllers/controllerSelector').controller('user');
 const auth = require('../middleware/auth')
 
 router.get('/', auth.protected, userController.getUsers)
-
-router.get('/matches', auth.protected, userController.findMatches)
 
 router.get('/:id', auth.protected, userController.getUserById)
 

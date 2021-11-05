@@ -183,8 +183,3 @@ exports.addPlatformToUser = async (req, res) => {
     // TODO implement
     return res.status(501).json({ data: 'Not yet implemented' })
 }
-
-exports.findMatches = async (req, res) => {
-    // TODO implement
-    return res.status(501).json({ data: 'Not yet implemented' })
-}

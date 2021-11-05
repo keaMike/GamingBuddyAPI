@@ -16,3 +16,8 @@ app.use('/swipes', swipeRoutes)
 app.listen(PORT, () => {
   console.log(`API running on port ${PORT}`)
 })
+
+
+// TODO implement statistics in mongo + neo4j
+// TODO what games are played by users? mongo + neo4j
+// TODO user_profiles in mongo + neo4j

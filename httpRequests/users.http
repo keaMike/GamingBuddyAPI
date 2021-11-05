@@ -1,0 +1,58 @@
+// users
+GET http://localhost:7160/users
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjM2MDQwMTI3fQ.N185EaaL0Q9j4vdr6gss6eQxoUc1cbfVgEtfRrtrNY8
+###
+
+// users/id (neo4j)
+GET http://localhost:7160/users/5
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjM2MDQwMTI3fQ.N185EaaL0Q9j4vdr6gss6eQxoUc1cbfVgEtfRrtrNY8
+###
+
+// users/signin
+POST http://localhost:7160/users/signin
+Content-Type: application/json
+
+{
+	"email": "wowow@big.dk",
+	"password": "1234"
+}
+###
+
+// users/signup
+POST http://localhost:7160/users/signup
+Content-Type: application/json
+
+{
+	"username": "mads",
+	"email": "mads@example.com",
+	"password": "1234hunter",
+	"bio": "g4m3r 4 liiiiiife"
+}
+###
+
+// users/addplatformtouser
+PUT http://localhost:7160/users/addplatformtouser
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjM2MDQwMTI3fQ.N185EaaL0Q9j4vdr6gss6eQxoUc1cbfVgEtfRrtrNY8
+Content-Type: application/json
+
+{
+	"platform" : {
+		"platformName": "Steam",
+		"gamertag": "muchsteam"
+	}
+}
+###
+
+// users/addgametouser
+PUT http://localhost:7160/users/addgametouser
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjM2MDQwMTI3fQ.N185EaaL0Q9j4vdr6gss6eQxoUc1cbfVgEtfRrtrNY8
+Content-Type: application/json
+
+{
+	"game" : {
+		"name": "Rocket League",
+		"publisher": "Blizzard",
+		"genre": "MMORPG",
+		"rank": "Gold"
+	}
+}

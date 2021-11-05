@@ -56,3 +56,8 @@ exports.findMatches = async (req, res) => {
             return res.status(500).json({ data: `Something went wrong, please try again. ${error}` })
     })
 }
+
+exports.swipeOnUser = async (req, res) => {
+    // TODO implement
+    return res.status(501).json({ data: 'Not yet implemented' })
+}

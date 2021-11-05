@@ -220,9 +220,12 @@ exports.findMatches = async (req, res) => {
         '(u:User), ' +
         '(users:User) ' +
         'WHERE ID(u) = $idParam AND ' +
-        '(u)->[:HAS_SWIPED_ON]->(users) AND ' +
-        '(users)->[:HAS_SWIPED_ON]->(u) ' +
-        'RETURN (users)'
+        '(u)-[:HAS_SWIPED_ON]->(users) AND ' +
+        '(users)-[:HAS_SWIPED_ON]->(u) ' +
+        'RETURN (users)',
+        {
+            idParam: neo4j.int(id)
+        }
     ).then(result => {
         const resultData = []
         result.records.forEach(record => {

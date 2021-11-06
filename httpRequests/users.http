@@ -1,4 +1,3 @@
-// users
 GET http://localhost:7160/users
 authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjM2MDQwMTI3fQ.N185EaaL0Q9j4vdr6gss6eQxoUc1cbfVgEtfRrtrNY8
 
@@ -18,7 +17,9 @@ authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjM2MDQw
 
 ###
 
-// users/id (neo4j + mysql)
+// neo4j id example = 5
+// mysql id example = // FIXME
+// mongo id example = // FIXME
 GET http://localhost:7160/users/5
 authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjM2MDQwMTI3fQ.N185EaaL0Q9j4vdr6gss6eQxoUc1cbfVgEtfRrtrNY8
 
@@ -33,22 +34,6 @@ authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjM2MDQw
 
 ###
 
-// users/id (mongo)
-GET http://localhost:7160/users/5 //FIXME
-authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjM2MDQwMTI3fQ.N185EaaL0Q9j4vdr6gss6eQxoUc1cbfVgEtfRrtrNY8
-
-# Example response:
-# {
-#   "data": {
-#     "bio": "wowow",
-#     "email": "wowow@big.dk",
-#     "username": "Wowzas"
-#   }
-# }
-
-###
-
-// users/signin
 POST http://localhost:7160/users/signin
 Content-Type: application/json
 
@@ -69,7 +54,6 @@ Content-Type: application/json
 
 ###
 
-// users/signup
 POST http://localhost:7160/users/signup
 Content-Type: application/json
 
@@ -87,7 +71,6 @@ Content-Type: application/json
 
 ###
 
-// users/addplatformtouser
 PUT http://localhost:7160/users/addplatformtouser
 authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjM2MDQwMTI3fQ.N185EaaL0Q9j4vdr6gss6eQxoUc1cbfVgEtfRrtrNY8
 Content-Type: application/json
@@ -106,7 +89,6 @@ Content-Type: application/json
 
 ###
 
-// users/addgametouser
 PUT http://localhost:7160/users/addgametouser
 authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjM2MDQwMTI3fQ.N185EaaL0Q9j4vdr6gss6eQxoUc1cbfVgEtfRrtrNY8
 Content-Type: application/json

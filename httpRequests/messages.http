@@ -1,4 +1,3 @@
-// messages/
 GET http://localhost:7160/messages
 authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjM2MDQwMTI3fQ.N185EaaL0Q9j4vdr6gss6eQxoUc1cbfVgEtfRrtrNY8
 
@@ -8,7 +7,7 @@ authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjM2MDQw
 #     {
 #       "content": "1v1 me noob",
 #       "sentAt": {
-#         "low": -189896203,
+#         "low": -189896203, // FIXME
 #         "high": 380
 #       }
 #     }
@@ -17,6 +16,9 @@ authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjM2MDQw
 
 ###
 
+// neo4j id example = // FIXME
+// mysql id example = // FIXME
+// mongo id example = // FIXME
 POST http://localhost:7160/messages
 authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjM2MDQwMTI3fQ.N185EaaL0Q9j4vdr6gss6eQxoUc1cbfVgEtfRrtrNY8
 Content-Type: application/json

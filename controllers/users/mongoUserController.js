@@ -22,6 +22,8 @@ exports.getUsers = async (req, res) => {
 exports.getUserById = async (req, res) => {
     const { id } = req.params
 
+    // TODO user_profile
+
     repo.find(userCollection, { id: id })
         .then(results => {
             return res.status(200).json({data: results})

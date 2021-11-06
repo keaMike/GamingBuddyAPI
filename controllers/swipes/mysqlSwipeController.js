@@ -25,6 +25,21 @@ exports.findMatches = async (req, res) => {
 }
 
 exports.swipeOnUser = async (req, res) => {
-    // TODO implement
-    return res.status(501).json({ data: 'Not yet implemented' })
+  const { id } = req.user
+  const otherUserId = req.query.otherUserId  
+  const pool = await getPool()
+
+  try {
+    pool.query(
+      'INSERT INTO swipes(sender_id, receiver_id, created_at) VALUES (?, ?, NOW())',
+      [id, otherUserId],
+      (error, results) => {
+        if (error) throw error
+        return res.status(200).json({ data: 'Swiped on user' })
+      }
+    )
+  } catch (error) {
+    return res.status(500)
+    .json({ data: `Something went wrong, please try again` })
+  }
 }

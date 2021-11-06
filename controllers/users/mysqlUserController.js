@@ -1,3 +1,4 @@
+const { response } = require('express')
 const { getPool } = require('../../database/mysqlConfig')
 const {
   hashPassword,
@@ -177,11 +178,45 @@ exports.signIn = async (req, res) => {
 }
 
 exports.addGameToUser = async (req, res) => {
-    // TODO implement
-    return res.status(501).json({ data: 'Not yet implemented' })
+  const { id } = req.user
+  const game = req.body.game
+  const pool = getPool()
+
+  try {
+    pool.query(
+      'INSERT INTO users_games (user_id, game_id, platform_id, rank, comment) ' +
+      'VALUES (?, ?, ?, ?, ?)',
+      [id, game.gameId, game.platformId, game.rank, game.comment],
+      (error, results) => {
+        if (error) throw error
+        return res.status(201).json({ data: 'Game added' })
+      }
+      )
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ data: 'Something went wrong, please try again' })
+  }
 }
 
 exports.addPlatformToUser = async (req, res) => {
-    // TODO implement
-    return res.status(501).json({ data: 'Not yet implemented' })
+  const { id } = req.user
+  const platform = req.body.platform
+  const pool = getPool()
+
+  try {
+    pool.query(
+      'INSERT INTO users_platforms (user_id, platform_id, gamertag) ' +
+      'VALUES (?, ?, ?)',
+      [id, platform.platformId, platform.gamertag],
+      (error, results) => {
+        if (error) throw error
+        return res.status(201).json({ data: 'Platform added' })
+      }
+      )
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ data: 'Something went wrong, please try again' })
+  }
 }

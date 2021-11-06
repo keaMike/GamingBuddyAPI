@@ -15,5 +15,12 @@ exports.controller = (type) => {
                 case 'neo4j' : return require('./swipes/neo4jSwipeController')
             }
         }
+        case 'message' : {
+            switch (process.env.DB_CHOICE) {
+                case 'mongo' : return require('./messages/mongoMessageController')
+                case 'mysql' : return require('./messages/mysqlMessageController')
+                case 'neo4j' : return require('./messages/neo4jMessageController')
+            }
+        }
     }
 }

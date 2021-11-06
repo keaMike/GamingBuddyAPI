@@ -1,3 +1,7 @@
+// TODO complete req + returns
+
+
+
 // users
 GET http://localhost:7160/users
 authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjM2MDQwMTI3fQ.N185EaaL0Q9j4vdr6gss6eQxoUc1cbfVgEtfRrtrNY8

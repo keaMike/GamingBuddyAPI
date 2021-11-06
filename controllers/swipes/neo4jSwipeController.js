@@ -43,6 +43,23 @@ exports.findMatches = async (req, res) => {
 }
 
 exports.swipeOnUser = async (req, res) => {
-    // TODO implement
-    return res.status(501).json({ data: 'Not yet implemented' })
+    const session = driver.session()
+    const { id } = req.user
+    const otherUserId = req.query.otherUserId
+
+    session.run(
+        'MATCH ' +
+        '(u:User), ' +
+        '(otherUser:User) ' +
+        'WHERE ID(u) = $idParam ' +
+        'AND ID(otherUser) = $otherUserIdParam ' +
+        'CREATE (u)-[:HAS_SWIPED_ON]->(otherUser)'
+        ).then(() => {
+            session.close()
+            return res.status(200).json({ data: 'Swiped on user' })
+        }).catch(error => {
+            session.close()
+            return res.status(500).json({ data: `Something has gone wrong, please try again. ${error}` })
+        })
+    
 }

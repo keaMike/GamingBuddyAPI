@@ -12,13 +12,11 @@ exports.sendMessage = (req, res) => {
     const receiverId = req.body.receiverId
     const content = req.body.content
 
-    // FIXME check if it is correct
-
     repo.insertOne(messageCollection, {
       senderId: ownId,
       receivingId: receiverId,
       content,
-      insertedAt: 'now'
+      insertedAt: 'now' // FIXME
     }).then(() => {
       return res.status(201).json({ data: 'Message sent' })
     }).catch(error => {

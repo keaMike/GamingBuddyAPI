@@ -58,6 +58,16 @@ exports.findMatches = async (req, res) => {
 }
 
 exports.swipeOnUser = async (req, res) => {
-    // TODO implement
-    return res.status(501).json({ data: 'Not yet implemented' })
+    const { id } = req.user
+    const otherUserId = req.query.otherUserId
+
+    repo.insertOne(swipeCollection, { 
+        createdAt: 'now', // FIXME
+        sender_id: id,
+        receiver_id: otherUserId
+     }).then(() => {
+         return res.status(200).json({ data: 'Swiped on user' })
+     }).catch(error => {
+        return res.status(500).json({ data: `Something went wrong, please try again. ${error}` })
+     })
 }

@@ -45,6 +45,8 @@ exports.getOwnUser = async (req, res) => {
 }
 
 function getUserById(id, session, res) {
+    // TODO user_profile
+    
     session.run('MATCH (u:User) WHERE ID(u) = $idParam RETURN(u)', {
         idParam: neo4j.int(id)
     }).then(result => {

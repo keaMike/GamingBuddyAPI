@@ -1,6 +1,30 @@
-// TODO complete req + returns
-
 // swipes/matches
 GET http://localhost:7160/swipes/matches
 authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjM2MDQwMTI3fQ.N185EaaL0Q9j4vdr6gss6eQxoUc1cbfVgEtfRrtrNY8
+
+# Example response:
+# {
+#   "data": [
+#     {
+#       "bio": "chinsUnite",
+#       "username": "BigChinny"
+#     }
+#   ]
+# }
+
 ###
+
+// swipes/swipeonuser
+POST http://localhost:7160/swipes/swipeonuser
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjM2MDQwMTI3fQ.N185EaaL0Q9j4vdr6gss6eQxoUc1cbfVgEtfRrtrNY8
+Content-Type: application/json
+
+{
+    "otherUserId": 6
+}
+
+# Example response:
+# {
+#   "data": "Swiped on user"
+#   ]
+# }

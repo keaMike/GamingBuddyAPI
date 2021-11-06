@@ -7,7 +7,7 @@ const {
 } = require('../../utils/encryption')
 
 exports.getUsers = async (req, res) => {
-  const ownId = 2
+  const ownId = req.user.id
   const { skip } = req.query
   const pool = await getPool()
   try {

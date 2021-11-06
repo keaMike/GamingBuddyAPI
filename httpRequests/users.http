@@ -1,15 +1,51 @@
-// TODO complete req + returns
-
-
-
 // users
 GET http://localhost:7160/users
 authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjM2MDQwMTI3fQ.N185EaaL0Q9j4vdr6gss6eQxoUc1cbfVgEtfRrtrNY8
+
+# Example response:
+# {
+#   "data": [
+#     {
+#       "bio": "chinsUnite",
+#       "username": "BigChinny"
+#     },
+#     {
+#       "bio": "bobbylobby",
+#       "username": "Bobby"
+#     }
+#   ]
+# }
+
 ###
 
-// users/id (neo4j)
+// users/id (neo4j + mysql)
 GET http://localhost:7160/users/5
 authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjM2MDQwMTI3fQ.N185EaaL0Q9j4vdr6gss6eQxoUc1cbfVgEtfRrtrNY8
+
+# Example response:
+# {
+#   "data": {
+#     "bio": "wowow",
+#     "email": "wowow@big.dk",
+#     "username": "Wowzas"
+#   }
+# }
+
+###
+
+// users/id (mongo)
+GET http://localhost:7160/users/5 //FIXME
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjM2MDQwMTI3fQ.N185EaaL0Q9j4vdr6gss6eQxoUc1cbfVgEtfRrtrNY8
+
+# Example response:
+# {
+#   "data": {
+#     "bio": "wowow",
+#     "email": "wowow@big.dk",
+#     "username": "Wowzas"
+#   }
+# }
+
 ###
 
 // users/signin
@@ -20,6 +56,17 @@ Content-Type: application/json
 	"email": "wowow@big.dk",
 	"password": "1234"
 }
+
+# Example response:
+# {
+#   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjM2MjIxNTU2fQ.p-c3fElNp46cl-HLsD7B8Ny_jj0p1dUEpea-yTQlm8M",
+#   "user": {
+#     "bio": "wowow",
+#     "email": "wowow@big.dk",
+#     "username": "Wowzas"
+#   }
+# }
+
 ###
 
 // users/signup
@@ -32,6 +79,12 @@ Content-Type: application/json
 	"password": "1234hunter",
 	"bio": "g4m3r 4 liiiiiife"
 }
+
+# Example response:
+# {
+#   "data": "Your account has been created"
+# }
+
 ###
 
 // users/addplatformtouser
@@ -45,6 +98,12 @@ Content-Type: application/json
 		"gamertag": "muchsteam"
 	}
 }
+
+# Example response:
+# {
+#   "data": "Platform added"
+# }
+
 ###
 
 // users/addgametouser
@@ -60,3 +119,8 @@ Content-Type: application/json
 		"rank": "Gold"
 	}
 }
+
+# Example response:
+# {
+#   "data": "Games added"
+# }

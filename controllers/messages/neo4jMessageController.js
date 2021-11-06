@@ -44,7 +44,7 @@ exports.getAllMessages = (req, res) => {
     '(u:User), ' +
     '(messages:Message) ' +
     'WHERE ID(u) = $idParam ' + 
-    '((u)-[:SENT_MESSAGE]->(messages) OR ' +
+    'AND ((u)-[:SENT_MESSAGE]->(messages) OR ' +
     '(messages)-[:SENT_TO]->(u)) ' +
     'RETURN (messages)',
     {

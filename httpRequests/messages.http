@@ -1,1 +1,32 @@
-// TODO complete req + returns
+// messages/
+GET http://localhost:7160/messages
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjM2MDQwMTI3fQ.N185EaaL0Q9j4vdr6gss6eQxoUc1cbfVgEtfRrtrNY8
+
+# Example response:
+# {
+#   "data": [
+#     {
+#       "content": "1v1 me noob",
+#       "sentAt": {
+#         "low": -189896203,
+#         "high": 380
+#       }
+#     }
+#   ]
+# }
+
+###
+
+POST http://localhost:7160/messages
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjM2MDQwMTI3fQ.N185EaaL0Q9j4vdr6gss6eQxoUc1cbfVgEtfRrtrNY8
+Content-Type: application/json
+
+{
+    "receiverId": 6,
+    "content" : "hey man"
+}
+
+# Example response:
+# {
+#     "data": "Message sent"
+# }

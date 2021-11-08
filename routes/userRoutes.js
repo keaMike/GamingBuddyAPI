@@ -1,10 +1,10 @@
 const router = require('express').Router()
-const userController = require('../controllers/controllerSelector').controller('user');
+const userController = require('../controllers/controllerSelector').controller('user')
 const auth = require('../middleware/auth')
 
 router.get('/', auth.protected, userController.getUsers)
 
-router.get('/:id', auth.protected, userController.getUserById)
+router.get('/:id', auth.protected, require('../controllers/controllerSelector').controller('user').getUserById)
 
 router.post('/signin', userController.signIn)
 

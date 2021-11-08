@@ -62,7 +62,7 @@ exports.swipeOnUser = async (req, res) => {
     const otherUserId = req.query.otherUserId
 
     repo.insertOne(swipeCollection, { 
-        createdAt: 'now', // FIXME
+        createdAt: Date.now(),
         sender_id: id,
         receiver_id: otherUserId
      }).then(() => {

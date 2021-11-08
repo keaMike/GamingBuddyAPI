@@ -24,7 +24,7 @@ exports.getUserById = async (req, res) => {
 
     // TODO user_profile
 
-    repo.find(userCollection, { id: id })
+    repo.find(userCollection, { _id: ObjectId(id) })
         .then(results => {
             return res.status(200).json({data: results})
         }).catch(error => {
@@ -34,7 +34,7 @@ exports.getUserById = async (req, res) => {
 
 exports.getOwnUser = async (req, res) => {
     const { id } = req.user
-    repo.find(userCollection, { id: id })
+    repo.find(userCollection, { _id: ObjectId(id) })
         .then(results => {
             return res.status(200).json({data: results})
         }).catch(error => {

@@ -56,7 +56,7 @@ exports.getAllMessages = (req, res) => {
         const data = record._fields[0].properties
         resultData.push({
           content: data.content,
-          sentAt: data.sentAt
+          sentAt: neo4j.int(data.sentAt).toNumber()
         })
       })
       session.close()

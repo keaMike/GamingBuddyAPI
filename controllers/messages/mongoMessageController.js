@@ -16,7 +16,7 @@ exports.sendMessage = (req, res) => {
       senderId: ownId,
       receivingId: receiverId,
       content,
-      insertedAt: 'now' // FIXME
+      insertedAt: Date.now()
     }).then(() => {
       return res.status(201).json({ data: 'Message sent' })
     }).catch(error => {

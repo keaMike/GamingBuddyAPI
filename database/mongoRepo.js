@@ -1,4 +1,4 @@
-const MongoDB = require('mongodb');
+const MongoDB = require('mongodb')
 
 const queryPromise = async function (queryType, collectionName, query, data) {
     return new Promise((resolve, reject) => {

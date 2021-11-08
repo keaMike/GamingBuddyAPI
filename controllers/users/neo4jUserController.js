@@ -50,9 +50,8 @@ function getUserById(id, session, res) {
     session.run('MATCH (u:User) WHERE ID(u) = $idParam RETURN(u)', {
         idParam: neo4j.int(id)
     }).then(result => {
-        console.log(result.summary.query)
-        const user = result.records[0]._fields[0].properties
-        if (user) {
+        if (result.records.length !== 0) {
+            const user = result.records[0]._fields[0].properties
             session.close()
             return res.status(200).json({ data: user })
         } else {

@@ -20,7 +20,7 @@ exports.sendMessage = async (req, res) => {
             created_at) VALUES 
             (?, ?, ?, NOW())`,
             [ownId, receiverId, content],
-            (error, results) => {
+            (error) => {
                 if (error) throw error
                 return res.status(200).json({ data: 'Message sent' })
             }
@@ -38,7 +38,7 @@ exports.getAllMessages = async (req, res) => {
   
   try {
     pool.query(
-      `SELECT * FROM messages WHERE receiving_user_id = ? 
+      `SELECT sending_user_id, receiving_user_id, content, created_at FROM messages WHERE receiving_user_id = ? 
       OR sending_user_id = ? ORDER BY created_at`,
       [id, id],
       (error, results) => {

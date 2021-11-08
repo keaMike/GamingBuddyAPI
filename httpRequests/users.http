@@ -40,7 +40,7 @@ authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTAyLCJpYXQiOjE2MzYz
 #     },
 # etc...
  
-# Example 404 response:
+# 404 response:
 # {
 #   "data": "Could not find user"
 # }
@@ -55,7 +55,6 @@ GET http://localhost:7160/users/7
 #authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjM2MDQwMTI3fQ.N185EaaL0Q9j4vdr6gss6eQxoUc1cbfVgEtfRrtrNY8
 # mysql token
 authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTAyLCJpYXQiOjE2MzYzNzczOTh9.qUbrMyg6XZCqct5HicFmBBoneNJyjEMT7McOmV3Tc-8
-
 
 # Example 200 response:
 # {
@@ -82,7 +81,7 @@ authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTAyLCJpYXQiOjE2MzYz
 #   }
 # }
 
-# Example 404 response:
+# 404 response:
 # {
 #   "data": "Could not find user"
 # }
@@ -107,7 +106,7 @@ Content-Type: application/json
 #   }
 # }
 
-# Example 404 response:
+# 404 response:
 # {
 #   "data": "Could not find user"
 # }
@@ -134,7 +133,6 @@ Content-Type: application/json
 #   "data": "User with that email or username already exists"
 # }
 
-
 # 400 response:
 # {
 #   "data": "Please fill all fields"
@@ -147,16 +145,14 @@ PUT http://localhost:7160/users/addplatformtouser
 #authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjM2MDQwMTI3fQ.N185EaaL0Q9j4vdr6gss6eQxoUc1cbfVgEtfRrtrNY8
 # mysql token
 authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTAyLCJpYXQiOjE2MzYzNzczOTh9.qUbrMyg6XZCqct5HicFmBBoneNJyjEMT7McOmV3Tc-8
-
 Content-Type: application/json
 
 
 # FIXME neo4j + mongo use id for platforms instead of name
 # means that mongo should not store entire platform in object, but only id
-
 {
 	"platform" : {
-		"platformId": 5, //FIXME relevant id
+		"platformId": 1,
 		"gamertag": "muchsteam"
 	}
 }
@@ -177,12 +173,11 @@ Content-Type: application/json
 
 # FIXME neo4j + mongo use id for games instead of name
 # means that mongo should not store entire game in object, but only id
-//FIXME relevant game + platform id
 {
 	"game" : {
-		"gameId": 4, 
-		"platformId": 5,
-		"rank": 50,
+		"gameId": 7, 
+		"platformId": 1,
+		"rank": "50",
 		"comment": ""
 	}
 }

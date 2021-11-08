@@ -11,11 +11,25 @@ exports.findMatches = async (req, res) => {
 
   try {
     pool.query(
-      'SELECT * FROM users WHERE IsAMatch(?, users_id)',
+      'SELECT * FROM user_profiles WHERE IsAMatch(?, id)',
       [id],
       (error, results) => {
         if (error) throw error
-        return res.status(200).json({ data: results })
+
+        if (results[0] === undefined) return res.status(404).json({ data: 'Did not find any matches' })
+
+        const returnObject = []
+
+        results.forEach(result => {
+          returnObject.push({ 
+            username: result.username,
+            bio: result.bio,
+            games: JSON.parse(result.games),
+            platforms: JSON.parse(result.platforms)
+           })
+        })
+
+        return res.status(200).json({ data: returnObject })
       }
     )
   } catch (error) {
@@ -26,14 +40,14 @@ exports.findMatches = async (req, res) => {
 
 exports.swipeOnUser = async (req, res) => {
   const { id } = req.user
-  const otherUserId = req.query.otherUserId  
+  const otherUserId = req.body.otherUserId  
   const pool = await getPool()
 
   try {
     pool.query(
       'INSERT INTO swipes(sender_id, receiver_id, created_at) VALUES (?, ?, NOW())',
-      [id, otherUserId],
-      (error, results) => {
+      [id, Number(otherUserId)],
+      (error) => {
         if (error) throw error
         return res.status(200).json({ data: 'Swiped on user' })
       }

@@ -210,8 +210,8 @@ exports.addGameToUser = async (req, res) => {
 
   try {
     pool.query(
-      'INSERT INTO users_games (user_id, game_id, platform_id, rank, comment) ' +
-      'VALUES (?, ?, ?, ?, ?)',
+      'INSERT INTO users_games (user_id, game_id, platform_id, `rank`, comment) ' +
+      'VALUES(?, ?, ?, ?, ?)',
       [id, game.gameId, game.platformId, game.rank, game.comment],
       (error) => {
         if (error) throw error
@@ -233,7 +233,7 @@ exports.addPlatformToUser = async (req, res) => {
   try {
     pool.query(
       'INSERT INTO users_platforms (user_id, platform_id, gamertag) ' +
-      'VALUES (?, ?, ?)',
+      'VALUES(?, ?, ?)',
       [id, platform.platformId, platform.gamertag],
       (error, results) => {
         if (error) throw error

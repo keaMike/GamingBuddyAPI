@@ -1,23 +1,53 @@
 GET http://localhost:7160/swipes/matches
-authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjM2MDQwMTI3fQ.N185EaaL0Q9j4vdr6gss6eQxoUc1cbfVgEtfRrtrNY8
+# neo4j token
+#authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjM2MDQwMTI3fQ.N185EaaL0Q9j4vdr6gss6eQxoUc1cbfVgEtfRrtrNY8
+# mysql token
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTAyLCJpYXQiOjE2MzYzNzczOTh9.qUbrMyg6XZCqct5HicFmBBoneNJyjEMT7McOmV3Tc-8
 
-# Example response:
+// FIXME neo4j + mongo missing games + platforms
+
+# Example 200 response:
 # {
 #   "data": [
 #     {
-#       "bio": "chinsUnite",
-#       "username": "BigChinny"
+#       "username": "Madeson Bell",
+#       "bio": "molestie. Sed id risus quis",
+#       "games": [
+#         {
+#           "id": 5,
+#           "name": "Rocket Leauge",
+#           "rank": "sit",
+#           "genre": "Sport",
+#           "comment": "convallis convallis dolor.",
+#           "publisher": "Psynoix"
+#         }
+#       ],
+#       "platforms": [
+#         {
+#           "id": 4,
+#           "gamertag": "Haley",
+#           "platform": "Origin"
+#         }
+#       ]
 #     }
 #   ]
 # }
 
-###
+# 404 response:
+# {
+#   "data": "Did not find any matches"
+# }
+
+##############################################################
 
 // neo4j id example = 5
-// mysql id example = 7
+// mysql id example = 6
 // mongo id example = 617ab04a92095632d0aec9dc
-POST http://localhost:7160/swipes/swipeonuser
-authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjM2MDQwMTI3fQ.N185EaaL0Q9j4vdr6gss6eQxoUc1cbfVgEtfRrtrNY8
+POST http://localhost:7160/swipes/swipe
+# neo4j token
+#authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjM2MDQwMTI3fQ.N185EaaL0Q9j4vdr6gss6eQxoUc1cbfVgEtfRrtrNY8
+# mysql token
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTAyLCJpYXQiOjE2MzYzNzczOTh9.qUbrMyg6XZCqct5HicFmBBoneNJyjEMT7McOmV3Tc-8
 Content-Type: application/json
 
 {
@@ -27,5 +57,4 @@ Content-Type: application/json
 # Example response:
 # {
 #   "data": "Swiped on user"
-#   ]
 # }

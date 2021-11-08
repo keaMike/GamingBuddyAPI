@@ -20,7 +20,7 @@ authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjM2MDQw
 // neo4j id example = 5
 // mysql id example = 7
 // mongo id example = 617ab04a92095632d0aec9dc
-GET http://localhost:7160/users/5
+GET http://localhost:7160/users/7
 authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjM2MDQwMTI3fQ.N185EaaL0Q9j4vdr6gss6eQxoUc1cbfVgEtfRrtrNY8
 
 # Example response:
@@ -61,7 +61,7 @@ Content-Type: application/json
 	"password": "1234"
 }
 
-# Example response:
+# Example 200 response:
 # {
 #   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjM2MjIxNTU2fQ.p-c3fElNp46cl-HLsD7B8Ny_jj0p1dUEpea-yTQlm8M",
 #   "user": {
@@ -69,6 +69,16 @@ Content-Type: application/json
 #     "email": "wowow@big.dk",
 #     "username": "Wowzas"
 #   }
+# }
+
+# Example 400 response:
+# {
+#   "data": "User with that email or username already exists"
+# }
+
+# Example 404 response:
+# {
+#   "data": "Could not find user"
 # }
 
 ###
@@ -83,7 +93,7 @@ Content-Type: application/json
 	"bio": "g4m3r 4 liiiiiife"
 }
 
-# Example response:
+# Example 200 response:
 # {
 #   "data": "Your account has been created"
 # }

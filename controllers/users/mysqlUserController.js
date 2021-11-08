@@ -8,8 +8,9 @@ const {
 
 exports.getUsers = async (req, res) => {
   const ownId = req.user.id
-  const { skip } = req.query
+  const skip = req.query.skip ? req.query.skip : 0
   const pool = await getPool()
+
   try {
     pool.query(
       `
@@ -21,17 +22,26 @@ exports.getUsers = async (req, res) => {
     `,
       [ownId, Number(skip)],
       (error, results) => {
+        const returnObject = []
+
+        results.forEach(result => {
+          returnObject.push({
+            bio: result.bio,
+            username: result.username,
+            games: JSON.parse(result.games),
+            platforms: JSON.parse(result.platforms)
+          })
+        })
+        
         if (error) throw error
-        console.log(JSON.parse(results[0].games))
-        console.log(JSON.parse(results[0].platforms))
-        return res.status(200).json({ data: results })
+        return res.status(200).json({ data: returnObject })
       }
     )
   } catch (error) {
     console.log(error)
     return res
       .status(500)
-      .json({ data: 'Something went wrong, please try again' })
+      .json({ data: `Something went wrong, please try again. ${error}` })
   }
 }
 
@@ -47,7 +57,18 @@ exports.getUserById = async (req, res) => {
       [id],
       (error, results) => {
         if (error) throw error
-        return res.status(200).json({ data: results })
+
+        if (results[0] === undefined) return res.status(404).json({ data: 'Could not find user' })
+
+        const resultObject = results[0]
+        const returnObject = {
+          bio: resultObject.bio,
+          username: resultObject.username,
+          games: JSON.parse(resultObject.games),
+          platforms: JSON.parse(resultObject.platforms)
+        }
+
+        return res.status(200).json({ data: returnObject })
       }
     )
   } catch (error) {
@@ -153,9 +174,12 @@ exports.signIn = async (req, res) => {
             WHERE email = ?
         `,
       [email],
-      async (error, result) => {
+      async (error, results) => {
         if (error) throw error
-        const user = result[0]
+
+        if (results[0] === undefined) return res.status(404).json({ data: 'Could not find user' })
+
+        const user = results[0]
         const hash = user.password
         if (hash) {
           const isValid = await verifyPassword(password, hash)

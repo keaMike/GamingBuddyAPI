@@ -1,63 +1,99 @@
 GET http://localhost:7160/users
-authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjM2MDQwMTI3fQ.N185EaaL0Q9j4vdr6gss6eQxoUc1cbfVgEtfRrtrNY8
+# neo4j token
+#authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjM2MDQwMTI3fQ.N185EaaL0Q9j4vdr6gss6eQxoUc1cbfVgEtfRrtrNY8
+# mysql token
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTAyLCJpYXQiOjE2MzYzNzczOTh9.qUbrMyg6XZCqct5HicFmBBoneNJyjEMT7McOmV3Tc-8
 
-# Example response:
+// FIXME neo4j needs games+platforms
+
+# Example 200 response:
 # {
 #   "data": [
 #     {
-#       "bio": "chinsUnite",
-#       "username": "BigChinny"
+#       "bio": "rhoncus. Nullam velit dui, semper et,",
+#       "username": "Libby Sherman",
+#       "games": [
+#         {
+#           "id": 2,
+#           "name": "CS:GO",
+#           "rank": "das",
+#           "genre": "Shooter",
+#           "comment": "fasdfasdfas",
+#           "publisher": "Valve"
+#         },
+#         {
+#           "id": 5,
+#           "name": "Rocket Leauge",
+#           "rank": "eget",
+#           "genre": "Sport",
+#           "comment": "id, blandit at,",
+#           "publisher": "Psynoix"
+#         }
+#       ],
+#       "platforms": [
+#         {
+#           "id": 2,
+#           "gamertag": "Shana",
+#           "platform": "Riot"
+#         }
+#       ]
 #     },
-#     {
-#       "bio": "bobbylobby",
-#       "username": "Bobby"
-#     }
-#   ]
+# etc...
+ 
+# Example 404 response:
+# {
+#   "data": "Could not find user"
 # }
 
-###
+##############################################################
 
 // neo4j id example = 5
 // mysql id example = 7
 // mongo id example = 617ab04a92095632d0aec9dc
 GET http://localhost:7160/users/7
-authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjM2MDQwMTI3fQ.N185EaaL0Q9j4vdr6gss6eQxoUc1cbfVgEtfRrtrNY8
+# neo4j token
+#authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjM2MDQwMTI3fQ.N185EaaL0Q9j4vdr6gss6eQxoUc1cbfVgEtfRrtrNY8
+# mysql token
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTAyLCJpYXQiOjE2MzYzNzczOTh9.qUbrMyg6XZCqct5HicFmBBoneNJyjEMT7McOmV3Tc-8
 
-# Example response:
+
+# Example 200 response:
 # {
 #   "data": {
-#     "bio": "wowow",
-#     "username": "Wowzas",
+#     "bio": "tincidunt orci quis lectus. Nullam suscipit,",
+#     "username": "Hyatt Campos",
 #     "games": [
 #       {
-#         "genre": "MMORPG",
-#         "name": "World of Warcraft",
-#         "publisher": "Blizzard"
-#       },
-#       {
-#         "name": "Rocket League",
-#         "genre": "Sport",
-#         "publisher": "Phyonix"
+#         "id": 10,
+#         "name": "Minecraft",
+#         "rank": "eget",
+#         "genre": "Adventure",
+#         "comment": "Mauris vel turpis.",
+#         "publisher": "Mojang"
 #       }
 #     ],
 #     "platforms": [
 #       {
-#         "name": "Steam"
-#       },
-#       {
-#         "name": "Blizzard"
+#         "id": 4,
+#         "gamertag": "Mara",
+#         "platform": "Origin"
 #       }
 #     ]
 #   }
 # }
 
-###
+# Example 404 response:
+# {
+#   "data": "Could not find user"
+# }
+
+##############################################################
 
 POST http://localhost:7160/users/signin
 Content-Type: application/json
 
 {
-	"email": "wowow@big.dk",
+	"email": "mysql0@example.com",
 	"password": "1234"
 }
 
@@ -71,67 +107,87 @@ Content-Type: application/json
 #   }
 # }
 
-# Example 400 response:
-# {
-#   "data": "User with that email or username already exists"
-# }
-
 # Example 404 response:
 # {
 #   "data": "Could not find user"
 # }
 
-###
+##############################################################
 
 POST http://localhost:7160/users/signup
 Content-Type: application/json
 
 {
-	"username": "mads",
-	"email": "mads@example.com",
-	"password": "1234hunter",
-	"bio": "g4m3r 4 liiiiiife"
+	"username": "mysql_example0",
+	"email": "mysql0@example.com",
+	"password": "1234",
+	"bio": "just an example"
 }
 
-# Example 200 response:
+# 200 response:
 # {
 #   "data": "Your account has been created"
 # }
 
-###
+# 400 response:
+# {
+#   "data": "User with that email or username already exists"
+# }
+
+
+# 400 response:
+# {
+#   "data": "Please fill all fields"
+# }
+
+##############################################################
 
 PUT http://localhost:7160/users/addplatformtouser
-authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjM2MDQwMTI3fQ.N185EaaL0Q9j4vdr6gss6eQxoUc1cbfVgEtfRrtrNY8
+# neo4j token
+#authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjM2MDQwMTI3fQ.N185EaaL0Q9j4vdr6gss6eQxoUc1cbfVgEtfRrtrNY8
+# mysql token
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTAyLCJpYXQiOjE2MzYzNzczOTh9.qUbrMyg6XZCqct5HicFmBBoneNJyjEMT7McOmV3Tc-8
+
 Content-Type: application/json
+
+
+# FIXME neo4j + mongo use id for platforms instead of name
+# means that mongo should not store entire platform in object, but only id
 
 {
 	"platform" : {
-		"platformName": "Steam",
+		"platformId": 5, //FIXME relevant id
 		"gamertag": "muchsteam"
 	}
 }
 
-# Example response:
+# 200 response:
 # {
 #   "data": "Platform added"
 # }
 
-###
+##############################################################
 
 PUT http://localhost:7160/users/addgametouser
-authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjM2MDQwMTI3fQ.N185EaaL0Q9j4vdr6gss6eQxoUc1cbfVgEtfRrtrNY8
+# neo4j token
+#authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjM2MDQwMTI3fQ.N185EaaL0Q9j4vdr6gss6eQxoUc1cbfVgEtfRrtrNY8
+# mysql token
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTAyLCJpYXQiOjE2MzYzNzczOTh9.qUbrMyg6XZCqct5HicFmBBoneNJyjEMT7McOmV3Tc-8
 Content-Type: application/json
 
+# FIXME neo4j + mongo use id for games instead of name
+# means that mongo should not store entire game in object, but only id
+//FIXME relevant game + platform id
 {
 	"game" : {
-		"name": "Rocket League",
-		"publisher": "Blizzard",
-		"genre": "MMORPG",
-		"rank": "Gold"
+		"gameId": 4, 
+		"platformId": 5,
+		"rank": 50,
+		"comment": ""
 	}
 }
 
-# Example response:
+# 200 response:
 # {
 #   "data": "Games added"
 # }

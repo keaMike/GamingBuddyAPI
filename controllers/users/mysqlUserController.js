@@ -24,6 +24,8 @@ exports.getUsers = async (req, res) => {
       (error, results) => {
         const returnObject = []
 
+        if (results[0] === undefined) return res.status(404).json({ data: 'Could not find users' })
+
         results.forEach(result => {
           returnObject.push({
             bio: result.bio,
@@ -204,14 +206,14 @@ exports.signIn = async (req, res) => {
 exports.addGameToUser = async (req, res) => {
   const { id } = req.user
   const game = req.body.game
-  const pool = getPool()
+  const pool = await getPool()
 
   try {
     pool.query(
       'INSERT INTO users_games (user_id, game_id, platform_id, rank, comment) ' +
       'VALUES (?, ?, ?, ?, ?)',
       [id, game.gameId, game.platformId, game.rank, game.comment],
-      (error, results) => {
+      (error) => {
         if (error) throw error
         return res.status(201).json({ data: 'Game added' })
       }
@@ -219,14 +221,14 @@ exports.addGameToUser = async (req, res) => {
   } catch (error) {
     return res
       .status(500)
-      .json({ data: 'Something went wrong, please try again' })
+      .json({ data: `Something went wrong, please try again. ${error}` })
   }
 }
 
 exports.addPlatformToUser = async (req, res) => {
   const { id } = req.user
   const platform = req.body.platform
-  const pool = getPool()
+  const pool = await getPool()
 
   try {
     pool.query(
@@ -241,6 +243,6 @@ exports.addPlatformToUser = async (req, res) => {
   } catch (error) {
     return res
       .status(500)
-      .json({ data: 'Something went wrong, please try again' })
+      .json({ data: `Something went wrong, please try again. ${error}` })
   }
 }

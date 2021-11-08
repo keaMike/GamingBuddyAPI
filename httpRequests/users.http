@@ -20,15 +20,34 @@ authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjM2MDQw
 // neo4j id example = 5
 // mysql id example = 7
 // mongo id example = 617ab04a92095632d0aec9dc
-GET http://localhost:7160/users/617ab04a92095632d0aec9dc
+GET http://localhost:7160/users/5
 authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjM2MDQwMTI3fQ.N185EaaL0Q9j4vdr6gss6eQxoUc1cbfVgEtfRrtrNY8
 
 # Example response:
 # {
 #   "data": {
 #     "bio": "wowow",
-#     "email": "wowow@big.dk",
-#     "username": "Wowzas"
+#     "username": "Wowzas",
+#     "games": [
+#       {
+#         "genre": "MMORPG",
+#         "name": "World of Warcraft",
+#         "publisher": "Blizzard"
+#       },
+#       {
+#         "name": "Rocket League",
+#         "genre": "Sport",
+#         "publisher": "Phyonix"
+#       }
+#     ],
+#     "platforms": [
+#       {
+#         "name": "Steam"
+#       },
+#       {
+#         "name": "Blizzard"
+#       }
+#     ]
 #   }
 # }
 

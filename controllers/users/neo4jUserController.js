@@ -45,13 +45,48 @@ exports.getOwnUser = async (req, res) => {
 }
 
 function getUserById(id, session, res) {
-    // TODO user_profile
-    
-    session.run('MATCH (u:User) WHERE ID(u) = $idParam RETURN(u)', {
+    session.run(
+        'MATCH ' +
+        '(u:User), ' +
+        '(uGames:Game), ' +
+        '(uPlatforms:Platform) ' +
+        'WHERE ID(u) = $idParam ' +
+        'AND (u)-[:PLAYS]->(uGames) ' +
+        'AND (u)-[:HAS_USER_ON]->(uPlatforms) ' +
+        'RETURN COLLECT(DISTINCT u), COLLECT(DISTINCT uGames), COLLECT(DISTINCT uPlatforms)', {
         idParam: neo4j.int(id)
     }).then(result => {
+        const games = []
+        const platforms = []
+        let user = {}
+
+        // FIXME if no user
+
+        result.records[0]._fields.forEach(field => {
+            field.forEach(node => {
+                const properties = node.properties
+                switch (node.labels[0]) {
+                    case 'User' : {
+                        user.bio = properties.bio
+                        user.username = properties.username
+                        break
+                    }
+                    case 'Game' : {
+                        games.push(node.properties)
+                        break
+                    }
+                    case 'Platform' : {
+                        platforms.push(node.properties)
+                        break
+                    }
+                }
+            })
+        })
+        user.games = games
+        user.platforms = platforms
+
         if (result.records.length !== 0) {
-            const user = result.records[0]._fields[0].properties
+            //const user = result.records[0]._fields[0].properties
             session.close()
             return res.status(200).json({ data: user })
         } else {

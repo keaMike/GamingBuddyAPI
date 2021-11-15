@@ -6,7 +6,7 @@ router.get('/', auth.protected, userController.getUsers)
 
 router.get('/:id', auth.protected, require('../controllers/controllerSelector').controller('user').getUserById)
 
-router.post('/signin', userController.signIn)
+router.post('/signin', userController.signIn) // TODO validate with https://www.npmjs.com/package/joi 
 
 router.post('/signup', userController.signUp)
 

@@ -53,7 +53,7 @@ exports.getUsersFromIds = (idArray) => { //TODO test
 
   try {
     pool.query(
-      `SELECT * FROM users ` +
+      `SELECT * FROM users ` + //TODO do not get password
       `WHERE users_id IN (?)`,
       [idString],
       (error, results) => {

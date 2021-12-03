@@ -1,4 +1,5 @@
 const repo = require('../database/mongoRepo')
+const { getUsersFromIds } = require('./userController')
 const messageCollection = 'messages'
 
 exports.sendMessage = (req, res) => {
@@ -24,6 +25,7 @@ exports.getAllMessages = (req, res) => {
   repo.find(messageCollection, {
     $or: [ { senderId: id }, { receivingId: id } ]
   }).then(results => {
+    // TODO get userids from results
     // TODO get user data from array of ids and make resultObject array
     return res.status(200).json({ data: results })
   }).catch(error => {

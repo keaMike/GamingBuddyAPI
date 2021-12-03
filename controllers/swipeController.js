@@ -1,4 +1,5 @@
 const { driver } = require('../database/neo4jConfig')
+const { getUsersFromIds } = require('./userController')
 
 exports.findMatches = async (req, res) => {
     const session = driver.session()
@@ -16,13 +17,12 @@ exports.findMatches = async (req, res) => {
             idParam: id
         }
     ).then(result => {
-        const resultData = []
         const ids = []
         result.records.forEach(record => {
             const data = record._fields[0].properties
             ids.push(data.id)
         })
-        // TODO fetch user info from ids and make resultdata array
+        const resultData = getUsersFromIds(ids)
         session.close()
         if (resultData.length !== 0) {
             return res.status(200).json({ data: resultData })

@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const userController = require('../controllers/controllerSelector').controller('user')
+const userController = require('../controllers/userController')
 const auth = require('../middleware/auth')
 
 router.get('/', auth.protected, userController.getUsers)

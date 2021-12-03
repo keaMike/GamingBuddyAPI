@@ -1,14 +1,11 @@
 GET http://localhost:7160/messages
-# neo4j token
-#authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjM2MDQwMTI3fQ.N185EaaL0Q9j4vdr6gss6eQxoUc1cbfVgEtfRrtrNY8
-# mysql token
-authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTAyLCJpYXQiOjE2MzYzNzczOTh9.qUbrMyg6XZCqct5HicFmBBoneNJyjEMT7McOmV3Tc-8
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTAyLCJpYXQiOjE2MzYzNzczOTh9.qUbrMyg6XZCqct5HicFmBBoneNJyjEMT7McOmV3Tc-8 //FIXME
 
 # Example 200 response
 # {
 #   "data": [
 #     {
-#       "sending_user_id": 502,
+#       "sending_user_id": 502, //FIXME
 #       "receiving_user_id": 6,
 #       "content": "hey man",
 #       "created_at": "2021-11-08T15:56:00.000Z"
@@ -24,18 +21,12 @@ authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTAyLCJpYXQiOjE2MzYz
 
 ##############################################################
 
-// neo4j id example = 5
-// mysql id example = 6
-// mongo id example = 617ab04a92095632d0aec9dc
 POST http://localhost:7160/messages
-# neo4j token
-#authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjM2MDQwMTI3fQ.N185EaaL0Q9j4vdr6gss6eQxoUc1cbfVgEtfRrtrNY8
-# mysql token
-authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTAyLCJpYXQiOjE2MzYzNzczOTh9.qUbrMyg6XZCqct5HicFmBBoneNJyjEMT7McOmV3Tc-8
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTAyLCJpYXQiOjE2MzYzNzczOTh9.qUbrMyg6XZCqct5HicFmBBoneNJyjEMT7McOmV3Tc-8 //FIXME
 Content-Type: application/json
 
 {
-    "receiverId": 6,
+    "receiverId": 6, //FIXME
     "content" : "hey man"
 }
 

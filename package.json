@@ -18,7 +18,8 @@
     "mongodb": "3.6.3",
     "mysql": "^2.18.1",
     "neo4j-driver": "^4.3.5",
-    "nodemon": "^2.0.13"
+    "nodemon": "^2.0.13",
+    "uuid": "8.3.2"
   },
   "devDependencies": {
     "prettier": "2.4.1"

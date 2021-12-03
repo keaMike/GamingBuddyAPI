@@ -1,10 +1,4 @@
-const neo4j = require('neo4j-driver')
-const { driver } = require('../../database/neo4jConfig')
-const {
-    hashPassword,
-    verifyPassword,
-    signToken,
-} = require('../../utils/encryption')
+const { driver } = require('../database/neo4jConfig')
 
 exports.findMatches = async (req, res) => {
     const session = driver.session()
@@ -12,24 +6,23 @@ exports.findMatches = async (req, res) => {
 
     session.run(
         'MATCH ' +
-        '(u:User), ' +
-        '(users:User) ' +
-        'WHERE ID(u) = $idParam AND ' +
+        '(u:SimpleUser), ' +
+        '(users:SimpleUser) ' +
+        'WHERE u.id = $idParam AND ' +
         '(u)-[:HAS_SWIPED_ON]->(users) AND ' +
         '(users)-[:HAS_SWIPED_ON]->(u) ' +
         'RETURN (users)', 
         {
-            idParam: neo4j.int(id)
+            idParam: id
         }
     ).then(result => {
         const resultData = []
+        const ids = []
         result.records.forEach(record => {
             const data = record._fields[0].properties
-            resultData.push({
-                bio: data.bio,
-                username: data.username
-            })
+            ids.push(data.id)
         })
+        // TODO fetch user info from ids and make resultdata array
         session.close()
         if (resultData.length !== 0) {
             return res.status(200).json({ data: resultData })
@@ -49,11 +42,15 @@ exports.swipeOnUser = async (req, res) => {
 
     session.run(
         'MATCH ' +
-        '(u:User), ' +
-        '(otherUser:User) ' +
+        '(u:SimpleUser), ' +
+        '(otherUser:SimpleUser) ' +
         'WHERE ID(u) = $idParam ' +
         'AND ID(otherUser) = $otherUserIdParam ' +
-        'CREATE (u)-[:HAS_SWIPED_ON]->(otherUser)'
+        'CREATE (u)-[:HAS_SWIPED_ON]->(otherUser)', 
+        {
+            idParam: id,
+            otherUserIdParam: otherUserId
+        }
         ).then(() => {
             session.close()
             return res.status(200).json({ data: 'Swiped on user' })

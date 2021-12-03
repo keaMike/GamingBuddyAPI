@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const messageController = require('../controllers/controllerSelector').controller('message')
+const messageController = require('../controllers/messageController')
 const auth = require('../middleware/auth')
 
 router.get('/', auth.protected, messageController.getAllMessages)

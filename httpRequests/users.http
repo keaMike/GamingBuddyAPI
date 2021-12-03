@@ -1,10 +1,5 @@
 GET http://localhost:7160/users
-# neo4j token
-#authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjM2MDQwMTI3fQ.N185EaaL0Q9j4vdr6gss6eQxoUc1cbfVgEtfRrtrNY8
-# mysql token
-authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTAyLCJpYXQiOjE2MzYzNzczOTh9.qUbrMyg6XZCqct5HicFmBBoneNJyjEMT7McOmV3Tc-8
-
-// FIXME neo4j needs games+platforms
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTAyLCJpYXQiOjE2MzYzNzczOTh9.qUbrMyg6XZCqct5HicFmBBoneNJyjEMT7McOmV3Tc-8 //FIXME
 
 # Example 200 response:
 # {
@@ -47,14 +42,8 @@ authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTAyLCJpYXQiOjE2MzYz
 
 ##############################################################
 
-// neo4j id example = 5
-// mysql id example = 7
-// mongo id example = 617ab04a92095632d0aec9dc
 GET http://localhost:7160/users/7
-# neo4j token
-#authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjM2MDQwMTI3fQ.N185EaaL0Q9j4vdr6gss6eQxoUc1cbfVgEtfRrtrNY8
-# mysql token
-authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTAyLCJpYXQiOjE2MzYzNzczOTh9.qUbrMyg6XZCqct5HicFmBBoneNJyjEMT7McOmV3Tc-8
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTAyLCJpYXQiOjE2MzYzNzczOTh9.qUbrMyg6XZCqct5HicFmBBoneNJyjEMT7McOmV3Tc-8 //FIXME
 
 # Example 200 response:
 # {
@@ -100,7 +89,7 @@ Content-Type: application/json
 # {
 #   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjM2MjIxNTU2fQ.p-c3fElNp46cl-HLsD7B8Ny_jj0p1dUEpea-yTQlm8M",
 #   "user": {
-#     "bio": "wowow",
+#     "bio": "wowow", //FIXME
 #     "email": "wowow@big.dk",
 #     "username": "Wowzas"
 #   }
@@ -141,15 +130,9 @@ Content-Type: application/json
 ##############################################################
 
 PUT http://localhost:7160/users/addplatformtouser
-# neo4j token
-#authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjM2MDQwMTI3fQ.N185EaaL0Q9j4vdr6gss6eQxoUc1cbfVgEtfRrtrNY8
-# mysql token
-authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTAyLCJpYXQiOjE2MzYzNzczOTh9.qUbrMyg6XZCqct5HicFmBBoneNJyjEMT7McOmV3Tc-8
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTAyLCJpYXQiOjE2MzYzNzczOTh9.qUbrMyg6XZCqct5HicFmBBoneNJyjEMT7McOmV3Tc-8 //FIXME
 Content-Type: application/json
 
-
-# FIXME neo4j + mongo use id for platforms instead of name
-# means that mongo should not store entire platform in object, but only id
 {
 	"platform" : {
 		"platformId": 1,
@@ -165,14 +148,9 @@ Content-Type: application/json
 ##############################################################
 
 PUT http://localhost:7160/users/addgametouser
-# neo4j token
-#authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjM2MDQwMTI3fQ.N185EaaL0Q9j4vdr6gss6eQxoUc1cbfVgEtfRrtrNY8
-# mysql token
-authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTAyLCJpYXQiOjE2MzYzNzczOTh9.qUbrMyg6XZCqct5HicFmBBoneNJyjEMT7McOmV3Tc-8
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTAyLCJpYXQiOjE2MzYzNzczOTh9.qUbrMyg6XZCqct5HicFmBBoneNJyjEMT7McOmV3Tc-8 //FIXME
 Content-Type: application/json
 
-# FIXME neo4j + mongo use id for games instead of name
-# means that mongo should not store entire game in object, but only id
 {
 	"game" : {
 		"gameId": 7, 

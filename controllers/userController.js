@@ -1,5 +1,5 @@
-const { response } = require('express')
-const { getPool } = require('../../database/mysqlConfig')
+const { v4: uuidv4 } = require('uuid');
+const { getPool } = require('../database/mysqlConfig')
 const {
   hashPassword,
   verifyPassword,
@@ -44,6 +44,27 @@ exports.getUsers = async (req, res) => {
     return res
       .status(500)
       .json({ data: `Something went wrong, please try again. ${error}` })
+  }
+}
+
+exports.getUsersFromIds = (idArray) => { //TODO test
+  const pool = await getPool()
+  const idString = idArray.join(', ')
+
+  try {
+    pool.query(
+      `SELECT * FROM users ` +
+      `WHERE users_id IN (?)`,
+      [idString],
+      (error, results) => {
+        if (error) throw error
+
+        return results
+      }
+    )
+  } catch (error) {
+    console.log(error)
+    return null
   }
 }
 
@@ -130,13 +151,14 @@ exports.signUp = async (req, res) => {
             .status(400)
             .json({ data: 'User with that email or username already exists' })
         } else {
+          const id = uuidv4()
           const hash = await hashPassword(password)
           pool.query(
             `
-        INSERT INTO users (username, email, password, bio)
-        VALUES(?,?,?,?)
+        INSERT INTO users (users_id, username, email, password, bio)
+        VALUES(?,?,?,?,?)
     `,
-            [username, email, hash, bio],
+            [id, username, email, hash, bio],
             (error) => {
               if (error) throw error
               return res

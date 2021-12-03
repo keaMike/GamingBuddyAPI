@@ -1,10 +1,5 @@
 GET http://localhost:7160/swipes/matches
-# neo4j token
-#authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjM2MDQwMTI3fQ.N185EaaL0Q9j4vdr6gss6eQxoUc1cbfVgEtfRrtrNY8
-# mysql token
-authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTAyLCJpYXQiOjE2MzYzNzczOTh9.qUbrMyg6XZCqct5HicFmBBoneNJyjEMT7McOmV3Tc-8
-
-// FIXME neo4j + mongo missing games + platforms
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTAyLCJpYXQiOjE2MzYzNzczOTh9.qUbrMyg6XZCqct5HicFmBBoneNJyjEMT7McOmV3Tc-8 //FIXME
 
 # Example 200 response:
 # {
@@ -40,18 +35,12 @@ authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTAyLCJpYXQiOjE2MzYz
 
 ##############################################################
 
-// neo4j id example = 5
-// mysql id example = 6
-// mongo id example = 617ab04a92095632d0aec9dc
 POST http://localhost:7160/swipes/swipe
-# neo4j token
-#authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjM2MDQwMTI3fQ.N185EaaL0Q9j4vdr6gss6eQxoUc1cbfVgEtfRrtrNY8
-# mysql token
-authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTAyLCJpYXQiOjE2MzYzNzczOTh9.qUbrMyg6XZCqct5HicFmBBoneNJyjEMT7McOmV3Tc-8
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTAyLCJpYXQiOjE2MzYzNzczOTh9.qUbrMyg6XZCqct5HicFmBBoneNJyjEMT7McOmV3Tc-8 //FIXME
 Content-Type: application/json
 
 {
-    "otherUserId": 6
+    "otherUserId": 6 //FIXME
 }
 
 # Example response:

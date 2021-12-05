@@ -1,4 +1,4 @@
-GET http://localhost:7160/api/users
+GET http://localhost:7160/api/users?limit=10
 authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjljMmQ0MGUxLWMyNTYtNDAzMy1iNTY1LTU1MDBjOThjZTgwZCIsImlhdCI6MTYzODcwMjk3Nn0.VmIXxI3xm2rF4RtXESTbmbvWscKHHu83Ypm-PUsJoXU
 
 # Example 200 response:
@@ -113,7 +113,7 @@ Content-Type: application/json
 	"bio": "just an example"
 }
 
-# 200 response:
+# 201 response:
 # {
 #   "data": "Your account has been created"
 # }

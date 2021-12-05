@@ -1,0 +1,28 @@
+<form onsubmit="signUp(); return false">
+    <div class="mb-3">
+        <label for="email-input" class="form-label">Email address</label>
+        <input type="email" class="form-control" id="email-input" aria-describedby="emailHelp">
+        <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+      </div>
+      <div class="mb-3">
+        <label for="username-input" class="form-label">Username</label>
+        <input type="text" class="form-control" id="username-input" aria-describedby="usernameHelp">
+        <div id="usernameHelp" class="form-text">What you want to be known by in the GamingBuddy universe.</div>
+      </div>
+      <div class="mb-3">
+        <label for="bio-input" class="form-label">Biography</label>
+        <input type="text" class="form-control" id="bio-input" aria-describedby="bioHelp">
+        <div id="bioHelp" class="form-text">A short describtion of you</div>
+      </div>
+      <div class="mb-3">
+        <label for="password-input" class="form-label">Password</label>
+        <input type="password" class="form-control" id="password-input">
+      </div>
+      <button type="submit" class="btn btn-primary">Sign up</button>
+</form>
+
+<br>
+
+<button class="btn btn-info" onclick="loadFragment('login')">Go back to login</button>
+
+<script src="./js/signup.js"></script>

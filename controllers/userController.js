@@ -9,7 +9,10 @@ const {
 exports.getUsers = async (req, res) => {
   const ownId = req.user.id
   const skip = req.query.skip ? req.query.skip : 0
+  const limit = req.query.limit ? req.query.limit : 500
   const pool = await getPool()
+
+  // TODO somehow do not get users already swiped on
 
   try {
     pool.query(
@@ -17,10 +20,10 @@ exports.getUsers = async (req, res) => {
       SELECT * FROM user_profiles
       WHERE id != ?
       ORDER BY id ASC
-      LIMIT 10
+      LIMIT ?
       OFFSET ?
     `,
-      [ownId, Number(skip)],
+      [ownId, Number(limit), Number(skip)],
       (error, results) => {
         const returnObject = []
 
@@ -28,6 +31,7 @@ exports.getUsers = async (req, res) => {
 
         results.forEach(result => {
           returnObject.push({
+            id: result.id,
             bio: result.bio,
             username: result.username,
             games: JSON.parse(result.games),

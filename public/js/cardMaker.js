@@ -3,13 +3,19 @@ function makeUserCard(user, haveMatched) {
     let platformString = ''
     let messageButton = ''
 
-    user.games.map(game => {
-        gameString += `<li><b>${game.name}</b> - <i>${game.rank}</i></li>`
-    })
+    console.log(user);
 
-    user.platforms.map(platform => {
-        platformString += `<li><b>${platform.platform}</b> - <b>${platform.gamertag}</b></li>`
-    })
+    if (user.games !== null) {
+        user.games.map(game => {
+            gameString += `<li><b>${game.name}</b> - <i>${game.rank}</i></li>`
+        })
+    }
+
+    if (user.platforms !== null) {
+        user.platforms.map(platform => {
+            platformString += `<li><b>${platform.platform}</b> - <b>${platform.gamertag}</b></li>`
+        })
+    }
 
     if (haveMatched) {
         messageButton = `<button class="btn btn-info" onclick="sessionStorage.setItem('sendMessageId', '${user.id}'); loadFragment('sendmessage')">Send message</button>`

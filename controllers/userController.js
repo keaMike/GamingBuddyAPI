@@ -49,17 +49,33 @@ exports.getUsers = async (req, res) => {
 
 exports.getUsersFromIds = async (idArray, callback) => {
   const pool = await getPool()
-  const idString = idArray.join(', ')
+  let idString = ""
+
+  idArray.map(id => {
+    idString = idString + `'${id}',`
+  })
+  idString = idString.slice(0, idString.length - 1)
 
   try {
     pool.query(
-      `SELECT users_id, username, email, bio FROM users ` + 
-      `WHERE users_id IN (?)`,
-      [idString],
+      `SELECT * FROM user_profiles ` + 
+      `WHERE id IN (${idString})`,
       (error, results) => {
         if (error) throw error
 
-        callback(results)
+        const returnArray = []
+
+        results.map(result => {
+          returnArray.push({
+            id: result.id,
+            username: result.username,
+            bio: result.bio,
+            games: JSON.parse(result.games),
+            platforms: JSON.parse(result.platforms)
+          })
+        })
+
+        callback(returnArray)
       }
     )
   } catch (error) {
@@ -224,6 +240,8 @@ exports.signIn = async (req, res) => {
                 return res.status(200).json({ token, user })
               }
               )
+          } else {
+            return res.status(401).json({ data: 'Wrong password' })
           }
         } else {
           return res.status(400).json({ data: 'Email has not been registered' })

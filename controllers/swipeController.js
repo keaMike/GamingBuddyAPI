@@ -23,7 +23,6 @@ exports.findMatches = async (req, res) => {
             ids.push(data.id)
         })
         getUsersFromIds(ids, (results) => {
-            console.log(results)
             session.close()
             if (results.length !== 0) {
                 return res.status(200).json({ data: results })

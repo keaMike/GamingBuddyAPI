@@ -21,7 +21,7 @@ exports.sendMessage = (req, res) => {
 
 exports.getAllMessages = (req, res) => {
   const { id } = req.user
-  
+
   repo.find(messageCollection, {
     $or: [ { senderId: id }, { receivingId: id } ]
   }).then(results => {
@@ -39,20 +39,22 @@ exports.getAllMessages = (req, res) => {
 
       // NOT good code - but not the prioty
       results.map(result => {
-        let user;
+        let userObject;
         let sent;
+
         if (result.senderId !== id) {
-          user = userResults.find(user => user.users_id === result.senderId)
+          userObject = userResults.find(user => user.id === result.senderId)
           sent = false
         }
         if (result.receivingId !== id) {
-          user = userResults.find(user => user.users_id === result.receivingId)
+          userObject = userResults.find(user => user.id === result.receivingId)
           sent = true
         }
+
         messages.push({
           user: {
-            id: user.users_id,
-            username: user.username
+            id: userObject.id,
+            username: userObject.username
           },
           content: result.content,
           sentAt: result.insertedAt,

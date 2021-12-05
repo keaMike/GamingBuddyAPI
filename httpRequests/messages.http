@@ -1,5 +1,5 @@
-GET http://localhost:7160/messages
-authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTAyLCJpYXQiOjE2MzYzNzczOTh9.qUbrMyg6XZCqct5HicFmBBoneNJyjEMT7McOmV3Tc-8 //FIXME
+GET http://localhost:7160/api/messages
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjljMmQ0MGUxLWMyNTYtNDAzMy1iNTY1LTU1MDBjOThjZTgwZCIsImlhdCI6MTYzODcwMjk3Nn0.VmIXxI3xm2rF4RtXESTbmbvWscKHHu83Ypm-PUsJoXU
 
 # Example 200 response
 # {
@@ -21,12 +21,12 @@ authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTAyLCJpYXQiOjE2MzYz
 
 ##############################################################
 
-POST http://localhost:7160/messages
-authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTAyLCJpYXQiOjE2MzYzNzczOTh9.qUbrMyg6XZCqct5HicFmBBoneNJyjEMT7McOmV3Tc-8 //FIXME
+POST http://localhost:7160/api/messages
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjljMmQ0MGUxLWMyNTYtNDAzMy1iNTY1LTU1MDBjOThjZTgwZCIsImlhdCI6MTYzODcwMjk3Nn0.VmIXxI3xm2rF4RtXESTbmbvWscKHHu83Ypm-PUsJoXU
 Content-Type: application/json
 
 {
-    "receiverId": 6, //FIXME
+    "receiverId": "6bb5a01f-4e56-4307-87f4-ca51dd40dd57",
     "content" : "hey man"
 }
 

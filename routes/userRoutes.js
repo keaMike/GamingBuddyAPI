@@ -4,7 +4,7 @@ const auth = require('../middleware/auth')
 
 router.get('/', auth.protected, userController.getUsers)
 
-router.get('/:id', auth.protected, require('../controllers/controllerSelector').controller('user').getUserById)
+router.get('/:id', auth.protected, userController.getUserById)
 
 router.post('/signin', userController.signIn) // TODO validate with https://www.npmjs.com/package/joi 
 

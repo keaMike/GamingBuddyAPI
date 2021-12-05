@@ -1,5 +1,5 @@
-GET http://localhost:7160/users
-authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTAyLCJpYXQiOjE2MzYzNzczOTh9.qUbrMyg6XZCqct5HicFmBBoneNJyjEMT7McOmV3Tc-8 //FIXME
+GET http://localhost:7160/api/users
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjljMmQ0MGUxLWMyNTYtNDAzMy1iNTY1LTU1MDBjOThjZTgwZCIsImlhdCI6MTYzODcwMjk3Nn0.VmIXxI3xm2rF4RtXESTbmbvWscKHHu83Ypm-PUsJoXU
 
 # Example 200 response:
 # {
@@ -42,8 +42,8 @@ authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTAyLCJpYXQiOjE2MzYz
 
 ##############################################################
 
-GET http://localhost:7160/users/7
-authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTAyLCJpYXQiOjE2MzYzNzczOTh9.qUbrMyg6XZCqct5HicFmBBoneNJyjEMT7McOmV3Tc-8 //FIXME
+GET http://localhost:7160/api/users/6bb5a01f-4e56-4307-87f4-ca51dd40dd57
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjljMmQ0MGUxLWMyNTYtNDAzMy1iNTY1LTU1MDBjOThjZTgwZCIsImlhdCI6MTYzODcwMjk3Nn0.VmIXxI3xm2rF4RtXESTbmbvWscKHHu83Ypm-PUsJoXU
 
 # Example 200 response:
 # {
@@ -77,11 +77,11 @@ authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTAyLCJpYXQiOjE2MzYz
 
 ##############################################################
 
-POST http://localhost:7160/users/signin
+POST http://localhost:7160/api/users/signin
 Content-Type: application/json
 
 {
-	"email": "mysql0@example.com",
+	"email": "mysql1@example.com",
 	"password": "1234"
 }
 
@@ -89,10 +89,11 @@ Content-Type: application/json
 # {
 #   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjM2MjIxNTU2fQ.p-c3fElNp46cl-HLsD7B8Ny_jj0p1dUEpea-yTQlm8M",
 #   "user": {
-#     "bio": "wowow", //FIXME
-#     "email": "wowow@big.dk",
-#     "username": "Wowzas"
-#   }
+#    "id": "9c2d40e1-c256-4033-b565-5500c98ce80d",
+#    "username": "mysql_example1",
+#    "email": "mysql1@example.com",
+#    "bio": "just an example"
+#  }
 # }
 
 # 404 response:
@@ -102,12 +103,12 @@ Content-Type: application/json
 
 ##############################################################
 
-POST http://localhost:7160/users/signup
+POST http://localhost:7160/api/users/signup
 Content-Type: application/json
 
 {
-	"username": "mysql_example0",
-	"email": "mysql0@example.com",
+	"username": "mysql_example4",
+	"email": "mysql4@example.com",
 	"password": "1234",
 	"bio": "just an example"
 }
@@ -129,8 +130,8 @@ Content-Type: application/json
 
 ##############################################################
 
-PUT http://localhost:7160/users/addplatformtouser
-authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTAyLCJpYXQiOjE2MzYzNzczOTh9.qUbrMyg6XZCqct5HicFmBBoneNJyjEMT7McOmV3Tc-8 //FIXME
+PUT http://localhost:7160/api/users/addplatformtouser
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjljMmQ0MGUxLWMyNTYtNDAzMy1iNTY1LTU1MDBjOThjZTgwZCIsImlhdCI6MTYzODcwMjk3Nn0.VmIXxI3xm2rF4RtXESTbmbvWscKHHu83Ypm-PUsJoXU
 Content-Type: application/json
 
 {
@@ -147,8 +148,8 @@ Content-Type: application/json
 
 ##############################################################
 
-PUT http://localhost:7160/users/addgametouser
-authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTAyLCJpYXQiOjE2MzYzNzczOTh9.qUbrMyg6XZCqct5HicFmBBoneNJyjEMT7McOmV3Tc-8 //FIXME
+PUT http://localhost:7160/api/users/addgametouser
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjljMmQ0MGUxLWMyNTYtNDAzMy1iNTY1LTU1MDBjOThjZTgwZCIsImlhdCI6MTYzODcwMjk3Nn0.VmIXxI3xm2rF4RtXESTbmbvWscKHHu83Ypm-PUsJoXU
 Content-Type: application/json
 
 {

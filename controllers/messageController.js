@@ -25,9 +25,43 @@ exports.getAllMessages = (req, res) => {
   repo.find(messageCollection, {
     $or: [ { senderId: id }, { receivingId: id } ]
   }).then(results => {
-    // TODO get userids from results
-    // TODO get user data from array of ids and make resultObject array
-    return res.status(200).json({ data: results })
+    const ids = new Set()
+
+    // Get user ids that are not the users own id
+    results.map(result => {
+      if (result.senderId !== id) ids.add(result.senderId)
+      if (result.receivingId !== id) ids.add(result.receivingId)
+    }) 
+
+    // Get user information
+    getUsersFromIds([...ids], (userResults) => {
+      const messages = []
+
+      // NOT good code - but not the prioty
+      results.map(result => {
+        let user;
+        let sent;
+        if (result.senderId !== id) {
+          user = userResults.find(user => user.users_id === result.senderId)
+          sent = false
+        }
+        if (result.receivingId !== id) {
+          user = userResults.find(user => user.users_id === result.receivingId)
+          sent = true
+        }
+        messages.push({
+          user: {
+            id: user.users_id,
+            username: user.username
+          },
+          content: result.content,
+          sentAt: result.insertedAt,
+          sent
+        })
+      })
+
+      return res.status(200).json({ data: messages })
+    })
   }).catch(error => {
     return res.status(500).json({ data: `Something went wrong, please try again. ${error}` })
   })

@@ -4,7 +4,7 @@ const {
   hashPassword,
   verifyPassword,
   signToken,
-} = require('../../utils/encryption')
+} = require('../utils/encryption')
 
 exports.getUsers = async (req, res) => {
   const ownId = req.user.id
@@ -47,19 +47,19 @@ exports.getUsers = async (req, res) => {
   }
 }
 
-exports.getUsersFromIds = (idArray) => { //TODO test
+exports.getUsersFromIds = async (idArray, callback) => {
   const pool = await getPool()
   const idString = idArray.join(', ')
 
   try {
     pool.query(
-      `SELECT * FROM users ` + //TODO do not get password
+      `SELECT users_id, username, email, bio FROM users ` + 
       `WHERE users_id IN (?)`,
       [idString],
       (error, results) => {
         if (error) throw error
 
-        return results
+        callback(results)
       }
     )
   } catch (error) {
@@ -137,38 +137,41 @@ exports.signUp = async (req, res) => {
     return res.status(400).json({ data: 'Please fill all fields' })
   }
 
-  try { // TODO transaction
-    pool.query(
-      `
-      SELECT users_id AS id FROM users
-      WHERE email = ? OR username = ?
-    `,
-      [email, username],
-      async (error, result) => {
+  try {
+    pool.getConnection(async (error, connection) => {
+      connection.beginTransaction(async error => {
         if (error) throw error
-        if (result[0]?.id) {
-          return res
-            .status(400)
-            .json({ data: 'User with that email or username already exists' })
-        } else {
-          const id = uuidv4()
-          const hash = await hashPassword(password)
-          pool.query(
-            `
-        INSERT INTO users (users_id, username, email, password, bio)
-        VALUES(?,?,?,?,?)
-    `,
-            [id, username, email, hash, bio],
-            (error) => {
-              if (error) throw error
-              return res
-                .status(201)
-                .json({ data: 'Your account has been created' })
-            }
-          )
-        }
-      }
-    )
+
+        const id = uuidv4()
+        const hash = await hashPassword(password)
+        let status = false
+
+        connection.query(
+          `INSERT IGNORE INTO users ` +
+          `(users_id, username, email, password, bio, created_at) ` +
+          `VALUES (?, ?, ?, ?, ?, NOW()); `,
+          [id, username, email, hash, bio],
+          (error, results) => {
+            if (error) return connection.rollback(() => { throw error })
+            if (results.affectedRows !== 0) status = true
+          }
+        )
+
+        connection.commit((error) => {
+          if (error) return connection.rollback(() => { throw error })
+          connection.release()
+          if (!status) {
+            return res
+              .status(400)
+              .json({ data: 'User with that email or username already exists' })
+          } else {
+            return res
+              .status(201)
+              .json({ data: 'Your account has been created' })
+          }
+        })
+      })
+    })
   } catch (error) {
     console.log(error)
     return res
@@ -209,8 +212,18 @@ exports.signIn = async (req, res) => {
           const isValid = await verifyPassword(password, hash)
           if (isValid) {
             delete user.password
-            const token = await signToken(user.id)
-            return res.status(200).json({ token, user })
+            
+            pool.query(
+              `UPDATE users SET last_login = NOW() ` +
+              `WHERE users_id = ?;`,
+              [user.id],
+              async (error, results) => {
+                if (error) throw error
+
+                const token = await signToken(user.id)
+                return res.status(200).json({ token, user })
+              }
+              )
           }
         } else {
           return res.status(400).json({ data: 'Email has not been registered' })

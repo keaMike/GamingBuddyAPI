@@ -1,7 +1,3 @@
-let currentUser
-let userArray
-const userHolder = $('#swipe-user-holder')
-
 function getUsers(skip) {
     fetch(`./api/users?skip=${skip}&limit=200`, {
         headers: {
@@ -31,8 +27,8 @@ function showUser(next) {
     }
     
     currentUser = userArray[0]
-
-    userHolder.html(makeUserCard(currentUser, false))
+    
+    $('#swipe-user-holder').html(makeUserCard(currentUser, false))
 }
 
 function swipe(swipeResult) {

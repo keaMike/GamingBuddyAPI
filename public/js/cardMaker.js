@@ -3,8 +3,6 @@ function makeUserCard(user, haveMatched) {
     let platformString = ''
     let messageButton = ''
 
-    console.log(user);
-
     if (user.games !== null) {
         user.games.map(game => {
             gameString += `<li><b>${game.name}</b> - <i>${game.rank}</i></li>`

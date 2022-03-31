@@ -40,14 +40,16 @@ exports.swipeOnUser = async (req, res) => {
     const session = driver.session()
     const { id } = req.user
     const otherUserId = req.body.otherUserId
+    const swipeStatus = req.body.status
 
     session.run(
         'MERGE(u:SimpleUser { id: $idParam }) ' +
         'MERGE(otherUser:SimpleUser { id: $otherUserIdParam }) ' +
-        'CREATE (u)-[:HAS_SWIPED_ON { timeStamp: timestamp() }]->(otherUser)', 
+        'CREATE (u)-[:HAS_SWIPED_ON { timeStamp: timestamp(), status: $status }]->(otherUser)', 
         {
             idParam: id,
-            otherUserIdParam: otherUserId
+            otherUserIdParam: otherUserId,
+            status: swipeStatus
         }
         ).then(() => {
             session.close()

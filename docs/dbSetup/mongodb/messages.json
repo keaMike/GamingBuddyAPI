@@ -1,0 +1,16 @@
+[
+  {
+    "_id": {"$oid": "617ab31004d9c27fb0eea404"},
+    "content": "1v1 me",
+    "created_at": "2021-03-18 09:07:00",
+    "receiving_user_id": {"$oid": "617ab0c592095632d0aec9dd"},
+    "sending_user_id": {"$oid": "617ab04a92095632d0aec9dc"}
+  },
+  {
+    "_id": {"$oid": "617ab33f04d9c27fb0eea406"},
+    "content": "nah neva",
+    "created_at": "2021-03-18 09:10:00",
+    "receiving_user_id": {"$oid": "617ab04a92095632d0aec9dc"},
+    "sending_user_id": {"$oid": "617ab0c592095632d0aec9dd"}
+  }
+]

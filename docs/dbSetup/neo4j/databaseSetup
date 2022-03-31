@@ -1,0 +1,70 @@
+-- Platforms
+CREATE (n:Platform { name: 'Steam' })
+CREATE (n:Platform { name: 'Blizzard' })
+
+-- Games
+MATCH (p:Platform) WHERE p.name = 'Steam'
+CREATE (n:Game { name: 'CS:GO', genre: 'FPS', publisher: 'Valve' })-[:CAN_BE_PLAYED_ON]->(p)
+RETURN n
+
+MATCH (p:Platform) WHERE p.name = 'Blizzard'
+CREATE (n:Game { name: 'World of Warcraft', genre: 'MMORPG', publisher: 'Blizzard' })-[:CAN_BE_PLAYED_ON]->(p)
+RETURN n
+
+MATCH (p:Platform) WHERE p.name = 'Steam'
+CREATE (n:Game { name: 'Rocket League', genre: 'Sport', publisher: 'Phyonix' })-[:CAN_BE_PLAYED_ON]->(p)
+RETURN n
+
+-- Users
+CREATE (u:User { bio: "chinsUnite", password: "$2a$10$o3RdyziQ6iUpf.l8LoxvwOCSUpHmh9W3RSXLAu52gb.duKdtp1aSy", email: "chinny@big.dk", username: "BigChinny" })
+RETURN u
+
+CREATE (u:User { bio: "wowow", password: "$2a$10$o3RdyziQ6iUpf.l8LoxvwOCSUpHmh9W3RSXLAu52gb.duKdtp1aSy", email: "wowow@big.dk", username: "Wowzas" })
+RETURN u
+
+CREATE (u:User { bio: "bobbylobby", password: "$2a$10$o3RdyziQ6iUpf.l8LoxvwOCSUpHmh9W3RSXLAu52gb.duKdtp1aSy", email: "bobby@big.dk", username: "Bobby" })
+RETURN u
+
+MATCH
+  (u:User),
+  (g:Game)
+WHERE u.username = 'BigChinny' AND g.name = 'CS:GO'
+CREATE (u)-[:PLAYS { rank: 'Ultra Silver General Master' }]->(g)
+
+MATCH
+  (u:User),
+  (p:Platform)
+WHERE u.username = 'BigChinny' AND p.name = 'Steam'
+CREATE (u)-[:HAS_USER_ON { SteamID: 'CHINBOI' }]->(p)
+
+MATCH
+  (u:User),
+  (g:Game)
+WHERE u.username = 'BigChinny' AND g.name = 'World of Warcraft'
+CREATE (u)-[:PLAYS { level: 79 }]->(g)
+
+MATCH
+  (u:User),
+  (p:Platform)
+WHERE u.username = 'BigChinny' AND p.name = 'Blizzard'
+CREATE (u)-[:HAS_USER_ON { BlizzardID: 'ChinMage#4456' }]->(p)
+
+MATCH
+  (u:User),
+  (g:Game)
+WHERE u.username = 'Wowzas' AND g.name = 'World of Warcraft'
+CREATE (u)-[:PLAYS { level: 45 }]->(g)
+
+MATCH
+  (u:User),
+  (p:Platform)
+WHERE u.username = 'Wowzas' AND p.name = 'Blizzard'
+CREATE (u)-[:HAS_USER_ON { BlizzardID: 'WowGoblin#6666' }]->(p)
+
+--- Swipes
+
+MATCH
+(u0:User),
+(u1:User)
+WHERE u0.username = 'BigChinny' AND u1.username = 'Wowzas'
+CREATE (u0)-[:HAS_SWIPED_ON { timeStamp: timestamp() }]->(u1)

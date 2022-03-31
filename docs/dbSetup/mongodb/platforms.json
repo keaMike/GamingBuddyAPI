@@ -1,0 +1,10 @@
+[
+  {
+    "_id": {"$oid": "617ab3ff04d9c27fb0eea40b"},
+    "platformName": "Steam"
+  },
+  {
+    "_id": {"$oid": "617ab3ff04d9c27fb0eea40c"},
+    "platformName": "Blizzard"
+  }
+]

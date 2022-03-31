@@ -1,0 +1,40 @@
+[
+    {
+      "key": {
+        "_id": 1
+      },
+      "name": "_id_",
+      "v": 2
+    },
+    {
+      "key": {
+        "senderId": 1
+      },
+      "name": "sender_id_index",
+      "v": 2,
+      "background": false
+    },
+    {
+      "key": {
+        "receivingId": 1
+      },
+      "name": "receiver_id_index",
+      "v": 2,
+      "background": false
+    },
+    {
+      "key": {
+        "_fts": "text",
+        "_ftsx": 1
+      },
+      "name": "content_index",
+      "v": 2,
+      "background": false,
+      "default_language": "english",
+      "language_override": "language",
+      "textIndexVersion": 3,
+      "weights": {
+        "content": 1
+      }
+    }
+  ]

@@ -40,7 +40,8 @@ authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjljMmQ0MGUxLWMyNTYt
 Content-Type: application/json
 
 {
-    "otherUserId": "5017e1c1-5b07-46f5-934a-ebe541b7588a"
+    "otherUserId": "5017e1c1-5b07-46f5-934a-ebe541b7588a",
+    "status": true
 }
 
 # Example response:

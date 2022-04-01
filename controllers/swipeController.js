@@ -10,8 +10,8 @@ exports.findMatches = async (req, res) => {
         '(u:SimpleUser), ' +
         '(users:SimpleUser) ' +
         'WHERE u.id = $idParam AND ' +
-        '(u)-[:HAS_SWIPED_ON]->(users) AND ' +
-        '(users)-[:HAS_SWIPED_ON]->(u) ' +
+        '(u)-[:HAS_SWIPED_ON { status: true }]->(users) AND ' +
+        '(users)-[:HAS_SWIPED_ON { status: true }]->(u) ' +
         'RETURN (users)', 
         {
             idParam: id
@@ -33,6 +33,29 @@ exports.findMatches = async (req, res) => {
     }).catch(error => {
         session.close()
         return res.status(500).json({ data: `Something went wrong, please try again. ${error}` })
+    })
+}
+
+exports.findUsersSwipedOn = async (id, callback) => {
+    const session = driver.session()
+
+    await session.run(
+        'MATCH ' +
+        '(u:SimpleUser), ' +
+        '(users:SimpleUser) ' +
+        'WHERE u.id = $idParam AND ' +
+        '(u)-[:HAS_SWIPED_ON]->(users) ' +
+        'RETURN (users)', 
+        {
+            idParam: id
+        }
+    ).then(async (result) => {
+      const ids = []
+      result.records.forEach(record => {
+        const data = record._fields[0].properties
+        ids.push(data.id)
+      })
+      callback(ids)
     })
 }
 

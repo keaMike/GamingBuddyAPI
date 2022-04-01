@@ -1,5 +1,6 @@
 const { v4: uuidv4 } = require('uuid');
 const { getPool } = require('../database/mysqlConfig')
+const { findUsersSwipedOn } = require('./swipeController')
 const {
   hashPassword,
   verifyPassword,
@@ -12,37 +13,47 @@ exports.getUsers = async (req, res) => {
   const limit = req.query.limit ? req.query.limit : 500
   const pool = await getPool()
 
-  // TODO somehow do not get users already swiped on
-
   try {
-    pool.query(
-      `
-      SELECT * FROM user_profiles
-      WHERE id != ?
-      ORDER BY id ASC
-      LIMIT ?
-      OFFSET ?
-    `,
-      [ownId, Number(limit), Number(skip)],
-      (error, results) => {
-        const returnObject = []
+    await findUsersSwipedOn(ownId, (ids) => {
+      let idString = ""
 
-        if (results[0] === undefined) return res.status(404).json({ data: 'Could not find users' })
-
-        results.forEach(result => {
-          returnObject.push({
-            id: result.id,
-            bio: result.bio,
-            username: result.username,
-            games: JSON.parse(result.games),
-            platforms: JSON.parse(result.platforms)
-          })
+      if (ids) {
+        ids.map(id => {
+          idString = idString + `'${id}',`
         })
-        
-        if (error) throw error
-        return res.status(200).json({ data: returnObject })
+        idString = idString.slice(0, idString.length - 1)
       }
-    )
+      
+      pool.query(
+        `
+        SELECT * FROM user_profiles
+        WHERE id != ?
+        AND id NOT IN (${idString})
+        ORDER BY id ASC
+        LIMIT ?
+        OFFSET ?
+      `,
+        [ownId, Number(limit), Number(skip)],
+        (error, results) => {
+          const returnObject = []
+
+          if (results[0] === undefined) return res.status(404).json({ data: 'Could not find users' })
+
+          results.forEach(result => {
+            returnObject.push({
+              id: result.id,
+              bio: result.bio,
+              username: result.username,
+              games: JSON.parse(result.games),
+              platforms: JSON.parse(result.platforms)
+            })
+          })
+          
+          if (error) throw error
+          return res.status(200).json({ data: returnObject })
+        }
+      )
+    });
   } catch (error) {
     console.log(error)
     return res

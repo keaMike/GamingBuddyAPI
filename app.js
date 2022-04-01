@@ -2,8 +2,14 @@ require('dotenv').config()
 require('./database/mysqlConfig').initConnection()
 const express = require('express')
 const app = express()
+const session = require('express-session')
 
-app.use(express.static('public'))
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false }
+}))
 
 const userRoutes = require('./routes/userRoutes')
 const swipeRoutes = require('./routes/swipeRoutes')

@@ -160,12 +160,12 @@ exports.getOwnUser = async (req, res) => {
   }
 }
 
-exports.signUp = async (req, res) => {
-  const { username, email, password, bio } = req.body
+exports.signUpProcess = async (username, email, password, bio, callback) => {
   const pool = await getPool()
 
   if (!username || !email || !password) {
-    return res.status(400).json({ data: 'Please fill all fields' })
+    callback(null, 'Please fill all fields', 400)
+    return
   }
 
   try {
@@ -192,31 +192,35 @@ exports.signUp = async (req, res) => {
           if (error) return connection.rollback(() => { throw error })
           connection.release()
           if (!status) {
-            return res
-              .status(400)
-              .json({ data: 'User with that email or username already exists' })
+            callback(null, 'User with that email or username already exists', 400)
+            return
           } else {
-            return res
-              .status(201)
-              .json({ data: 'Your account has been created' })
+            callback('Your account has been created', null, 201)
+            return
           }
         })
       })
     })
   } catch (error) {
-    console.log(error)
-    return res
-      .status(500)
-      .json({ data: 'Something went wrong, please try again' })
+    callback(null, 'Something went wrong, please try again', 500)
+    return
   }
 }
 
-exports.signIn = async (req, res) => {
-  const { email, password } = req.body
+exports.signUp = async (req, res) => {
+  const { username, email, password, bio } = req.body
+  
+  await this.signUpProcess(username, email, password, bio, (success, error, statusCode) => {
+    if (success) return res.status(statusCode).send({ data: success })
+    else return res.status(statusCode).send({ data: error })
+  })
+}
+
+exports.signInProcess = async (email, password, callback) => {
   const pool = await getPool()
 
   if (!email || !password) {
-    return res.status(404).json({ data: 'Please fill you both fields' })
+    callback(null, 'Please fill both fields', 404)
   }
 
   try {
@@ -235,7 +239,10 @@ exports.signIn = async (req, res) => {
       async (error, results) => {
         if (error) throw error
 
-        if (results[0] === undefined) return res.status(404).json({ data: 'Could not find user' })
+        if (results[0] === undefined) {
+          callback(null, 'Could not find user', 404)
+          return
+        }
 
         const user = results[0]
         const hash = user.password
@@ -252,23 +259,32 @@ exports.signIn = async (req, res) => {
                 if (error) throw error
 
                 const token = await signToken(user.id)
-                return res.status(200).json({ token, user })
+                callback({ token, user }, null, 200)
+                return 
               }
               )
           } else {
-            return res.status(401).json({ data: 'Wrong password' })
+            callback(null, 'Wrong password', 401)
+            return
           }
         } else {
-          return res.status(400).json({ data: 'Email has not been registered' })
+          callback(null, 'Email has not been registered', 400)
+          return
         }
       }
     )
   } catch (error) {
-    console.log(error)
-    return res
-      .status(500)
-      .json({ data: 'Something went wrong, please try again' })
+    callback(null, 'Something went wrong, please try again', 500)
   }
+}
+
+exports.signIn = async (req, res) => {
+  const { email, password } = req.body
+  
+  await this.signInProcess(email, password, (success, error, statusCode) => {
+    if (success) return res.status(statusCode).send({ data: success })
+    else return res.status(statusCode).send({ data: error })
+  })
 }
 
 exports.addGameToUser = async (req, res) => {

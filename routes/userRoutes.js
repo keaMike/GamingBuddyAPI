@@ -6,6 +6,8 @@ const passport = require('passport')
 const GoogleStrategy = require('passport-google-oidc')
 
 // might need to build it up from the bottom with passport auth in mind, this is fkn messy
+// callback function is (redirect, success, error) ig
+// see https://www.passportjs.org/concepts/authentication/password/
 
 passport.use(new GoogleStrategy({
   clientID: process.env.GOOGLE_CLIENT_ID,

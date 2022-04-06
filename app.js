@@ -11,6 +11,7 @@ app.use(session({
   cookie: { secure: false }
 }))
 
+const loginRoutes = require('./routes/loginRoutes')
 const userRoutes = require('./routes/userRoutes')
 const swipeRoutes = require('./routes/swipeRoutes')
 const messageRoutes = require('./routes/messageRoutes')
@@ -18,6 +19,8 @@ const messageRoutes = require('./routes/messageRoutes')
 const PORT = process.env.PORT | 3000
 
 app.use(express.json())
+
+app.use('/api/login', loginRoutes)
 
 app.use('/api/users', userRoutes)
 

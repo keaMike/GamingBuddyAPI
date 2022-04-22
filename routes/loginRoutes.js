@@ -7,7 +7,7 @@ const {
 } = require('../controllers/loginController')
 
 router.get('/failed', (req, res) => {
-  res.send('you failed!')
+  res.send(`you failed!`)
 })
 
 passport.serializeUser(function(user, done) {
@@ -25,7 +25,7 @@ router.post('/password',
   (req, res) => {
     const user = req.user
     req.session.user = user
-    res.send({ data: user })
+    res.redirect(process.env.AUTH_REDIRECT)
 })
 
 passport.use(googleStrategy);
@@ -37,7 +37,7 @@ router.get('/google/redirect',
   (req, res) => {
     const user = req.user
     req.session.user = user
-    res.send({ data: user })
+    res.redirect(process.env.AUTH_REDIRECT)
   }
 )
 

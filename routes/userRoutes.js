@@ -4,6 +4,8 @@ const auth = require('../middleware/auth')
 
 router.get('/', auth.protected, userController.getUsers)
 
+router.get('/me', auth.protected, userController.getOwnUser)
+
 router.get('/:id', auth.protected, userController.getUserById)
 
 router.post('/signup', userController.signUp)

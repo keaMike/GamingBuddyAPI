@@ -184,7 +184,7 @@ exports.getOwnUserProcess = async (id, callback) => {
       [id],
       (error, results) => {
         if (error) throw error
-        callback(results, null, 200)
+        callback(results[0], null, 200)
       }
     )
   } catch (error) {
@@ -196,7 +196,7 @@ exports.getOwnUserProcess = async (id, callback) => {
 exports.getOwnUser = async (req, res) => {
   const { id } = req.user.id
   
-  getOwnUserProcess(id, (success, error, statusCode) => {
+  this.getOwnUserProcess(id, (success, error, statusCode) => {
     if (success) return res.status(statusCode).json({ data: success })
     else return res.status(statusCode).json({ data: error })
   })

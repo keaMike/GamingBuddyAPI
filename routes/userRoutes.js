@@ -20,4 +20,8 @@ router.get('/own', auth.protected, userController.getOwnUser)
 
 router.get('/:id', auth.protected, userController.getUserById)
 
+router.put('/updateuser', auth.protected, userController.updateUser)
+
+router.get('/:id', auth.protected, userController.getUserById)
+
 module.exports = router

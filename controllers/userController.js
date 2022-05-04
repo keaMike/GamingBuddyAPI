@@ -279,6 +279,38 @@ exports.signIn = async (req, res) => {
   }
 }
 
+exports.updateUser = async (req, res) => {
+  const { id } = req.user
+  const {
+    username,
+    email,
+    bio,
+    password
+  } = req.body
+  const pool = await getPool()
+
+  try {
+    pool.query(`
+      UPDATE users
+      SET
+        username = COALESCE(?, username),
+        email = COALESCE(?, email),
+        bio = COALESCE(?, bio),
+        password = COALESCE(?, password)
+      WHERE users_id = ?;
+    `,
+    [username, email, bio, password, id],
+    (error) => {
+      if (error) throw error
+      return res.status(200).json({ data: 'User info updated' })
+    })
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ data: 'Something went wrong, please try again' })
+  }
+}
+
 exports.addGameToUser = async (req, res) => {
   const { id } = req.user
   const game = req.body.game

@@ -1,4 +1,4 @@
-const { v4: uuidv4 } = require('uuid');
+const { v4: uuidv4 } = require('uuid')
 const { getPool } = require('../database/mysqlConfig')
 const { findUsersSwipedOn } = require('./swipeController')
 const {
@@ -15,15 +15,15 @@ exports.getUsers = async (req, res) => {
 
   try {
     await findUsersSwipedOn(ownId, (ids) => {
-      let idString = ""
+      let idString = ''
 
       if (ids) {
-        ids.map(id => {
+        ids.map((id) => {
           idString = idString + `'${id}',`
         })
         idString = idString.slice(0, idString.length - 1)
       }
-      
+
       pool.query(
         `
         SELECT * FROM user_profiles
@@ -37,23 +37,24 @@ exports.getUsers = async (req, res) => {
         (error, results) => {
           const returnObject = []
 
-          if (results[0] === undefined) return res.status(404).json({ data: 'Could not find users' })
+          if (results[0] === undefined)
+            return res.status(404).json({ data: 'Could not find users' })
 
-          results.forEach(result => {
+          results.forEach((result) => {
             returnObject.push({
               id: result.id,
               bio: result.bio,
               username: result.username,
               games: JSON.parse(result.games),
-              platforms: JSON.parse(result.platforms)
+              platforms: JSON.parse(result.platforms),
             })
           })
-          
+
           if (error) throw error
           return res.status(200).json({ data: returnObject })
         }
       )
-    });
+    })
   } catch (error) {
     console.log(error)
     return res
@@ -64,29 +65,28 @@ exports.getUsers = async (req, res) => {
 
 exports.getUsersFromIds = async (idArray, callback) => {
   const pool = await getPool()
-  let idString = ""
+  let idString = ''
 
-  idArray.map(id => {
+  idArray.map((id) => {
     idString = idString + `'${id}',`
   })
   idString = idString.slice(0, idString.length - 1)
 
   try {
     pool.query(
-      `SELECT * FROM user_profiles ` + 
-      `WHERE id IN (${idString})`,
+      `SELECT * FROM user_profiles ` + `WHERE id IN (${idString})`,
       (error, results) => {
         if (error) throw error
 
         const returnArray = []
 
-        results.map(result => {
+        results.map((result) => {
           returnArray.push({
             id: result.id,
             username: result.username,
             bio: result.bio,
             games: JSON.parse(result.games),
-            platforms: JSON.parse(result.platforms)
+            platforms: JSON.parse(result.platforms),
           })
         })
 
@@ -112,14 +112,15 @@ exports.getUserById = async (req, res) => {
       (error, results) => {
         if (error) throw error
 
-        if (results[0] === undefined) return res.status(404).json({ data: 'Could not find user' })
+        if (results[0] === undefined)
+          return res.status(404).json({ data: 'Could not find user' })
 
         const resultObject = results[0]
         const returnObject = {
           bio: resultObject.bio,
           username: resultObject.username,
           games: JSON.parse(resultObject.games),
-          platforms: JSON.parse(resultObject.platforms)
+          platforms: JSON.parse(resultObject.platforms),
         }
 
         return res.status(200).json({ data: returnObject })
@@ -127,29 +128,30 @@ exports.getUserById = async (req, res) => {
     )
   } catch (error) {
     console.log(error)
-      return res.status(500)
+    return res
+      .status(500)
       .json({ data: 'Something went wrong, please try again' })
   }
 }
 
 exports.getOwnUser = async (req, res) => {
-  const { id } = req.user.id
+  const id = req.user.id
   const pool = await getPool()
   try {
     pool.query(
       `
       SELECT 
-        user_id AS id,
+        users_id AS id,
         username,
         email,
         bio
       FROM users
-      WHERE id = ?
+      WHERE users_id = ?
     `,
       [id],
       (error, results) => {
         if (error) throw error
-        return res.status(200).json({ data: results })
+        return res.status(200).json({ data: results[0] })
       }
     )
   } catch (error) {
@@ -170,7 +172,7 @@ exports.signUp = async (req, res) => {
 
   try {
     pool.getConnection(async (error, connection) => {
-      connection.beginTransaction(async error => {
+      connection.beginTransaction(async (error) => {
         if (error) throw error
 
         const id = uuidv4()
@@ -179,17 +181,23 @@ exports.signUp = async (req, res) => {
 
         connection.query(
           `INSERT IGNORE INTO users ` +
-          `(users_id, username, email, password, bio, created_at) ` +
-          `VALUES (?, ?, ?, ?, ?, NOW()); `,
+            `(users_id, username, email, password, bio, created_at) ` +
+            `VALUES (?, ?, ?, ?, ?, NOW()); `,
           [id, username, email, hash, bio],
           (error, results) => {
-            if (error) return connection.rollback(() => { throw error })
+            if (error)
+              return connection.rollback(() => {
+                throw error
+              })
             if (results.affectedRows !== 0) status = true
           }
         )
 
         connection.commit((error) => {
-          if (error) return connection.rollback(() => { throw error })
+          if (error)
+            return connection.rollback(() => {
+              throw error
+            })
           connection.release()
           if (!status) {
             return res
@@ -235,7 +243,8 @@ exports.signIn = async (req, res) => {
       async (error, results) => {
         if (error) throw error
 
-        if (results[0] === undefined) return res.status(404).json({ data: 'Could not find user' })
+        if (results[0] === undefined)
+          return res.status(404).json({ data: 'Could not find user' })
 
         const user = results[0]
         const hash = user.password
@@ -243,10 +252,9 @@ exports.signIn = async (req, res) => {
           const isValid = await verifyPassword(password, hash)
           if (isValid) {
             delete user.password
-            
+
             pool.query(
-              `UPDATE users SET last_login = NOW() ` +
-              `WHERE users_id = ?;`,
+              `UPDATE users SET last_login = NOW() ` + `WHERE users_id = ?;`,
               [user.id],
               async (error, results) => {
                 if (error) throw error
@@ -254,7 +262,7 @@ exports.signIn = async (req, res) => {
                 const token = await signToken(user.id)
                 return res.status(200).json({ token, user })
               }
-              )
+            )
           } else {
             return res.status(401).json({ data: 'Wrong password' })
           }
@@ -279,13 +287,13 @@ exports.addGameToUser = async (req, res) => {
   try {
     pool.query(
       'INSERT INTO users_games (user_id, game_id, platform_id, `rank`, comment) ' +
-      'VALUES(?, ?, ?, ?, ?)',
+        'VALUES(?, ?, ?, ?, ?)',
       [id, game.gameId, game.platformId, game.rank, game.comment],
       (error) => {
         if (error) throw error
         return res.status(201).json({ data: 'Game added' })
       }
-      )
+    )
   } catch (error) {
     return res
       .status(500)
@@ -301,13 +309,13 @@ exports.addPlatformToUser = async (req, res) => {
   try {
     pool.query(
       'INSERT INTO users_platforms (user_id, platform_id, gamertag) ' +
-      'VALUES(?, ?, ?)',
+        'VALUES(?, ?, ?)',
       [id, platform.platformId, platform.gamertag],
       (error, results) => {
         if (error) throw error
         return res.status(201).json({ data: 'Platform added' })
       }
-      )
+    )
   } catch (error) {
     return res
       .status(500)

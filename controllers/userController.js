@@ -3,6 +3,8 @@ const { getPool } = require('../database/mysqlConfig')
 const { findUsersSwipedOn } = require('./swipeController')
 const {
   hashPassword,
+  verifyPassword,
+  signToken,
 } = require('../utils/encryption')
 
 exports.getUsers = async (req, res) => {
@@ -15,7 +17,7 @@ exports.getUsers = async (req, res) => {
     await findUsersSwipedOn(ownId, (ids) => {
       let idString = ""
 
-      if (ids.length !== 0) {
+      if (ids) {
         ids.map(id => {
           idString = idString + `'${id}',`
         })
@@ -26,7 +28,7 @@ exports.getUsers = async (req, res) => {
         `
         SELECT * FROM user_profiles
         WHERE id != ?
-        ${ids.length !== 0 ? `AND id NOT IN (${idString})` : '' }
+        AND id NOT IN (${idString})
         ORDER BY id ASC
         LIMIT ?
         OFFSET ?
@@ -35,7 +37,7 @@ exports.getUsers = async (req, res) => {
         (error, results) => {
           const returnObject = []
 
-          if (!results || results.length === 0) return res.status(404).json({ data: 'Could not find users' })
+          if (results[0] === undefined) return res.status(404).json({ data: 'Could not find users' })
 
           results.forEach(result => {
             returnObject.push({
@@ -63,11 +65,6 @@ exports.getUsers = async (req, res) => {
 exports.getUsersFromIds = async (idArray, callback) => {
   const pool = await getPool()
   let idString = ""
-
-  if (idArray.length === 0) {
-    callback([])
-    return
-  }
 
   idArray.map(id => {
     idString = idString + `'${id}',`
@@ -135,79 +132,40 @@ exports.getUserById = async (req, res) => {
   }
 }
 
-exports.getUserByEmail = async (email, callback) => {
-  const pool = await getPool()
-  try {
-    pool.query(
-      `
-      SELECT * FROM users
-      WHERE email = ?
-    `,
-      [email],
-      (error, results) => {
-        if (error) throw error
-
-        if (results[0] === undefined) {
-          callback(null)
-          return
-        }
-
-        const resultObject = results[0]
-        const returnObject = {
-          id: resultObject.users_id,
-          email: resultObject.email,
-          password: resultObject.password,
-          username: resultObject.username
-        }
-
-        callback(returnObject)
-      }
-    )
-  } catch (error) {
-    callback(null)
-  }
-}
-
-exports.getOwnUserProcess = async (id, callback) => {
+exports.getOwnUser = async (req, res) => {
+  const { id } = req.user.id
   const pool = await getPool()
   try {
     pool.query(
       `
       SELECT 
-        users_id AS id,
+        user_id AS id,
         username,
         email,
         bio
       FROM users
-      WHERE users_id = ?
+      WHERE id = ?
     `,
       [id],
       (error, results) => {
         if (error) throw error
-        callback(results[0], null, 200)
+        return res.status(200).json({ data: results })
       }
     )
   } catch (error) {
     console.log(error)
-    callback(null, 'Something went wrong, please try again', 500)
+    return res
+      .status(500)
+      .json({ data: 'Something went wrong, please try again' })
   }
 }
 
-exports.getOwnUser = async (req, res) => {
-  const { id } = req.user.id
-  
-  this.getOwnUserProcess(id, (success, error, statusCode) => {
-    if (success) return res.status(statusCode).json({ data: success })
-    else return res.status(statusCode).json({ data: error })
-  })
-}
-
-exports.signUpProcess = async (username, email, password, bio, credLogin, callback) => {
+exports.signUp = async (req, res) => {
+  const { username, email, password, bio } = req.body
   const pool = await getPool()
 
-  if (!username || !email || (!credLogin && !password)) {
-    callback(null, 'Please fill all fields', 400)
-    return
+  if (!username || !email || !password) {
+    return res.status(400).json({ data: 'Please fill all fields' })
   }
 
   try {
@@ -216,7 +174,7 @@ exports.signUpProcess = async (username, email, password, bio, credLogin, callba
         if (error) throw error
 
         const id = uuidv4()
-        const hash = credLogin ? '' : await hashPassword(password)
+        const hash = await hashPassword(password)
         let status = false
 
         connection.query(
@@ -234,41 +192,83 @@ exports.signUpProcess = async (username, email, password, bio, credLogin, callba
           if (error) return connection.rollback(() => { throw error })
           connection.release()
           if (!status) {
-            callback(null, 'User with that email or username already exists', 400)
-            return
+            return res
+              .status(400)
+              .json({ data: 'User with that email or username already exists' })
           } else {
-            callback({ message: 'Your account has been created!', id: id }, null, 201)
-            return
+            return res
+              .status(201)
+              .json({ data: 'Your account has been created' })
           }
         })
       })
     })
   } catch (error) {
-    callback(null, 'Something went wrong, please try again', 500)
-    return
+    console.log(error)
+    return res
+      .status(500)
+      .json({ data: 'Something went wrong, please try again' })
   }
 }
 
-exports.signUp = async (req, res) => {
-  const { username, email, password, bio } = req.body
-  
-  await this.signUpProcess(username, email, password, bio, false, (success, error, statusCode) => {
-    if (success) return res.status(statusCode).send({ data: success })
-    else return res.status(statusCode).send({ data: error })
-  })
-}
-
-exports.updateLastLogin = async (userId) => {
+exports.signIn = async (req, res) => {
+  const { email, password } = req.body
   const pool = await getPool()
 
-  pool.query(
-    `UPDATE users SET last_login = NOW() ` +
-    `WHERE users_id = ?;`,
-    [userId],
-    async (error, results) => {
-      if (error) throw error
-    }
+  if (!email || !password) {
+    return res.status(404).json({ data: 'Please fill you both fields' })
+  }
+
+  try {
+    pool.query(
+      `
+            SELECT 
+                users_id AS id,
+                username,
+                email,
+                password,
+                bio 
+            FROM users
+            WHERE email = ?
+        `,
+      [email],
+      async (error, results) => {
+        if (error) throw error
+
+        if (results[0] === undefined) return res.status(404).json({ data: 'Could not find user' })
+
+        const user = results[0]
+        const hash = user.password
+        if (hash) {
+          const isValid = await verifyPassword(password, hash)
+          if (isValid) {
+            delete user.password
+            
+            pool.query(
+              `UPDATE users SET last_login = NOW() ` +
+              `WHERE users_id = ?;`,
+              [user.id],
+              async (error, results) => {
+                if (error) throw error
+
+                const token = await signToken(user.id)
+                return res.status(200).json({ token, user })
+              }
+              )
+          } else {
+            return res.status(401).json({ data: 'Wrong password' })
+          }
+        } else {
+          return res.status(400).json({ data: 'Email has not been registered' })
+        }
+      }
     )
+  } catch (error) {
+    console.log(error)
+    return res
+      .status(500)
+      .json({ data: 'Something went wrong, please try again' })
+  }
 }
 
 exports.addGameToUser = async (req, res) => {
@@ -312,44 +312,5 @@ exports.addPlatformToUser = async (req, res) => {
     return res
       .status(500)
       .json({ data: `Something went wrong, please try again. ${error}` })
-  }
-}
-
-exports.addCredentials = async (userId, provider, subject, callback) => {
-  const pool = await getPool()
-
-  try {
-    pool.query(
-      ` 
-        INSERT INTO credentials (user_id, provider, subject) 
-        VALUES(?, ?, ?)
-      `,
-      [userId, provider, subject],
-      (error, results) => {
-        if (error) throw error
-        callback(true)
-      }
-    )
-  } catch (error) {
-    callback(false)
-  }
-}
-
-exports.findCredentials = async (provider, subject, callback) => {
-  const pool = await getPool()
-
-  try {
-    pool.query(
-      `
-        SELECT * FROM credentials WHERE provider = ? AND subject = ?
-      `,
-      [provider, subject],
-      (error, results) => {
-        if (error) throw error
-        callback(results)
-      }
-    )
-  } catch (error) {
-    callback(false)
   }
 }

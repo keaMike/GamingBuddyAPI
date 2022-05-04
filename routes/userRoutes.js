@@ -12,6 +12,8 @@ router.put('/addgametouser', auth.protected, userController.addGameToUser)
 
 router.put('/addplatformtouser', auth.protected, userController.addPlatformToUser)
 
+router.put('/updateuser', auth.protected, userController.updateUser)
+
 router.get('/:id', auth.protected, userController.getUserById)
 
 module.exports = router

@@ -9,6 +9,7 @@ const {
 
 exports.getUsers = async (req, res) => {
   const ownId = req.user.id
+  const { platform, game } = req.query
   const skip = req.query.skip ? req.query.skip : 0
   const limit = req.query.limit ? req.query.limit : 500
   const pool = await getPool()
@@ -17,7 +18,7 @@ exports.getUsers = async (req, res) => {
     await findUsersSwipedOn(ownId, (ids) => {
       let idString = ''
 
-      if (ids) {
+      if (ids.length > 0) {
         ids.map((id) => {
           idString = idString + `'${id}',`
         })
@@ -26,20 +27,28 @@ exports.getUsers = async (req, res) => {
 
       pool.query(
         `
-        SELECT * FROM user_profiles
-        WHERE id != ?
-        AND id NOT IN (${idString})
-        ORDER BY id ASC
-        LIMIT ?
-        OFFSET ?
-      `,
+          SELECT * FROM user_profiles
+          LEFT JOIN users_games ug ON ug.user_id = id
+          LEFT JOIN games g ON g.games_id = ug.game_id
+          LEFT JOIN users_platforms up ON up.user_id = id
+          LEFT JOIN platforms p ON p.platform_id = up.platform_id
+          WHERE id != ?
+          ${ids.length > 0 ? `AND id NOT IN (${idString})` : ''}
+          ${
+            platform && platform !== 'null'
+              ? `AND p.platformName = '${platform}'`
+              : ''
+          }
+          ${game && game !== 'null' ? `AND g.name = '${game}'` : ''}
+          ORDER BY id ASC
+          LIMIT ?
+          OFFSET ?
+        `,
         [ownId, Number(limit), Number(skip)],
         (error, results) => {
           const returnObject = []
 
-          if (results[0] === undefined)
-            return res.status(404).json({ data: 'Could not find users' })
-
+          if (!results) return res.status(200).json({ data: [] })
           results.forEach((result) => {
             returnObject.push({
               id: result.id,
@@ -74,7 +83,7 @@ exports.getUsersFromIds = async (idArray, callback) => {
 
   try {
     pool.query(
-      `SELECT * FROM user_profiles ` + `WHERE id IN (${idString})`,
+      `SELECT * FROM user_profiles WHERE id IN ('${idString}')`,
       (error, results) => {
         if (error) throw error
 
@@ -281,16 +290,12 @@ exports.signIn = async (req, res) => {
 
 exports.updateUser = async (req, res) => {
   const { id } = req.user
-  const {
-    username,
-    email,
-    bio,
-    password
-  } = req.body
+  const { username, email, bio, password } = req.body
   const pool = await getPool()
 
   try {
-    pool.query(`
+    pool.query(
+      `
       UPDATE users
       SET
         username = COALESCE(?, username),
@@ -299,11 +304,12 @@ exports.updateUser = async (req, res) => {
         password = COALESCE(?, password)
       WHERE users_id = ?;
     `,
-    [username, email, bio, password, id],
-    (error) => {
-      if (error) throw error
-      return res.status(200).json({ data: 'User info updated' })
-    })
+      [username, email, bio, password, id],
+      (error) => {
+        if (error) throw error
+        return res.status(200).json({ data: 'User info updated' })
+      }
+    )
   } catch (error) {
     return res
       .status(500)

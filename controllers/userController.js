@@ -73,6 +73,11 @@ exports.getUsers = async (req, res) => {
 }
 
 exports.getUsersFromIds = async (idArray, callback) => {
+  if (idArray.length === 0) {
+    callback([])
+    return
+  }
+
   const pool = await getPool()
   let idString = ''
 
@@ -83,7 +88,7 @@ exports.getUsersFromIds = async (idArray, callback) => {
 
   try {
     pool.query(
-      `SELECT * FROM user_profiles WHERE id IN ('${idString}')`,
+      `SELECT * FROM user_profiles WHERE id IN (${idString})`, //TODO throws error when empty
       (error, results) => {
         if (error) throw error
 

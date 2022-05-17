@@ -36,7 +36,6 @@ exports.findMatches = async (req, res) => {
       userController.getUsersFromIds(ids, (results) => {
         session.close()
         if (results.length !== 0) {
-          console.log(results)
           return res.status(200).json({ data: results })
         } else {
           return res.status(200).json({ data: [] })

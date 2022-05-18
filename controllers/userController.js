@@ -154,18 +154,20 @@ exports.getOwnUser = async (req, res) => {
   try {
     pool.query(
       `
-      SELECT 
-        users_id AS id,
-        username,
-        email,
-        bio
-      FROM users
-      WHERE users_id = ?
+      SELECT * FROM user_profiles
+      WHERE id = ?
     `,
       [id],
       (error, results) => {
         if (error) throw error
-        return res.status(200).json({ data: results[0] })
+        const user = {
+          id: results[0].id,
+          bio: results[0].bio,
+          username: results[0].username,
+          games: JSON.parse(results[0].games) || [],
+          platforms: JSON.parse(results[0].platforms) || [],
+        }
+        return res.status(200).json({ data: user })
       }
     )
   } catch (error) {
@@ -297,7 +299,10 @@ exports.updateUser = async (req, res) => {
   const { id } = req.user
   const { username, email, bio, password } = req.body
   const pool = await getPool()
-
+  let hash = undefined
+  if (password) {
+    hash = await hashPassword(password)
+  }
   try {
     pool.query(
       `
@@ -309,7 +314,7 @@ exports.updateUser = async (req, res) => {
         password = COALESCE(?, password)
       WHERE users_id = ?;
     `,
-      [username, email, bio, password, id],
+      [username, email, bio, hash, id],
       (error) => {
         if (error) throw error
         return res.status(200).json({ data: 'User info updated' })
@@ -331,7 +336,7 @@ exports.addGameToUser = async (req, res) => {
     pool.query(
       'INSERT INTO users_games (user_id, game_id, platform_id, `rank`, comment) ' +
         'VALUES(?, ?, ?, ?, ?)',
-      [id, game.gameId, game.platformId, game.rank, game.comment],
+      [id, game.gameId, 1, null, null],
       (error) => {
         if (error) throw error
         return res.status(201).json({ data: 'Game added' })
@@ -353,7 +358,7 @@ exports.addPlatformToUser = async (req, res) => {
     pool.query(
       'INSERT INTO users_platforms (user_id, platform_id, gamertag) ' +
         'VALUES(?, ?, ?)',
-      [id, platform.platformId, platform.gamertag],
+      [id, platform.platformId, 'Jane doe'],
       (error, results) => {
         if (error) throw error
         return res.status(201).json({ data: 'Platform added' })
